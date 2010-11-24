@@ -1,0 +1,11 @@
+{
+   "trigger": {
+       "/writefiles": {
+           "method": "GET"
+       }
+   },
+   "workers": {
+       "writefiles": {
+       }
+   }
+}

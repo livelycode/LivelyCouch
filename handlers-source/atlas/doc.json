@@ -1,0 +1,8 @@
+{
+  "mapping":{
+     "/": "main.js",
+     "/jit": "modeling-server.js",
+     "/test": "test.js",
+     "/signup": "signup.js"
+  }
+}

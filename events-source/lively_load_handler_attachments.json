@@ -1,0 +1,15 @@
+{
+   "trigger": {
+       "/handler_source_changelistener/handler_source_changed/js": {
+           "method": "GET"
+       },
+       "/handler_source_changelistener/handler_source_changed/html": {
+           "method": "GET"
+       }
+   },
+   "workers": {
+       "loadfiles": {
+           "db": "lively_handlers"
+       }
+   }
+}

@@ -1,0 +1,11 @@
+{
+   "trigger": {
+       "/lively_events/lively_events_started": {
+           "method": "GET"
+       }
+   },
+   "workers": {
+       "config_emitter": {
+       }
+   }
+}

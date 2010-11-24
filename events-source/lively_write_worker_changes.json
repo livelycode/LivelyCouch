@@ -1,0 +1,12 @@
+{
+   "type": "HTTP",
+   "trigger": {
+       "/lively_events/worker_source_changed": {
+           "method": "GET"
+       }
+   },
+   "workers": {
+       "write_worker_to_disk": {
+       }
+   }
+}

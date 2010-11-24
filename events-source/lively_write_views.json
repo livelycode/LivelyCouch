@@ -1,0 +1,15 @@
+{
+   "trigger": {
+       "/changelistener/handler_changed": {
+           "method": "GET"
+       }
+   },
+   "workers": {
+       "writefiles": {
+           "db": "lively_handlers",
+           "path": "/Users/mirkokiefer/Development/node/livelycouch_deployed/handlers/",
+           "login": "lively",
+           "password": "lively"
+       }
+   }
+}

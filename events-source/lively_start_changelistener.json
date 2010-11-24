@@ -1,0 +1,11 @@
+{
+   "trigger": {
+       "/changelistener/start": {
+           "method": "GET"
+       }
+   },
+   "workers": {
+       "changelistener": {
+       }
+   }
+}

@@ -1,0 +1,11 @@
+{
+   "trigger": {
+       "/timer/stop": {
+           "method": "GET"
+       }
+   },
+   "workers": {
+       "timer": {
+       }
+   }
+}
