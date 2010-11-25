@@ -6,9 +6,9 @@ var fs = require('fs');
 var workerLib = require('../../lib/workerlib');
 var couchdb = workerLib.couchdb;
 
-var name = 'changelistener';
+var name = 'messagerewriter';
 //var messages = {stop: };
-workerLib.setEventNamespace(name);
+workerLib.eventNamespace = name;
 //workerLib.messages = messages;
 
 var client;
@@ -24,25 +24,22 @@ dataStream.on('data', function(d) {
 dataStream.on('end', function() {
   process.exit(0);
 });
-//
+
 var execute = function(parameters) {
   var event = parameters.eventArguments.event;
-  var id = parameters.eventArguments.query.listenerid;
-  if(event == 'changelistener/stop') {
-    stopChangeListener(id);
+  var id = parameters.eventArguments.query.rewriteid;
+  if (event == 'rewrite/stop') {
+    stopRewriteListener(id);
   } else {
-    var events = parameters.eventArguments.query.events;
-    var dbName = parameters.eventArguments.query.db;
+    var rewrites = JSON.parse(parameters.eventArguments.query.rewrites);
     var filter = parameters.eventArguments.query.filter;
-    var login = parameters.eventArguments.query.login;
-    var password = parameters.eventArguments.query.password;
-    
+
     client = couchdb.createClient(5984, '127.0.0.1', login, password);
-    startChangeListener(id, dbName, filter, events);  
+    startRewriteListener(id, dbName, filter, events);  
   }
 }
 
-var startChangeListener = function(id, dbName, filter, events) {
+var startRewriteListener = function(id, dbName, filter, events) {
   stopChangeListener(id);
   var changeListener = createChangeListener(dbName);
   changeListener.on('data', function(data) {

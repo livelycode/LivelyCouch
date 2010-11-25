@@ -7,8 +7,8 @@
    "workers": {
        "filesystem_changelistener": {
            "listenerid": "event_source_changes",
-           "fileendings": "[\"json\"]",
-           "mark_changed_on_start": "false"
+           "fileendings": ["json"],
+           "mark_changed_on_start": false
        }
    }
 }

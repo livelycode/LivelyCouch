@@ -13,7 +13,7 @@ var watch = require('./lib/watch');
 
 //values are being initialized in startup()
 var workerPath;
-var viewPath;
+var handlerPath;
 var workerSourcePaths = [];
 var eventSourcePaths = [];
 var logEvents = false;
@@ -72,7 +72,14 @@ var launchEventSystem = function() {
         handleHTTPEvent(pathName, eventArguments, response);
       });
     } else {
-      eventArguments.query = urlObject.query;
+      eventArguments.query = {};
+      for(var queryParam in urlObject.query) {
+        try {
+          eventArguments.query[queryParam] = JSON.parse(urlObject.query[queryParam]);     
+        } catch(e) {
+          eventArguments.query[queryParam] = urlObject.query[queryParam];
+        }
+      }
       if(!eventArguments.query) eventArguments.query = {};
       handleHTTPEvent(pathName, eventArguments, response);
     }
@@ -480,6 +487,17 @@ internalWorkers.workerSourceChangeListener = function(params) {
 // end internal Workers
 
 var startup = function() {
+  var checkDirectories = function() {
+    var checkDirectory = function(dir) {
+      try {
+        fs.statSync(dir);
+      } catch(e) {
+        fs.mkdirSync(dir, 0777);
+      }    
+    }
+    var paths = [handlerPath, workerPath];
+    paths.forEach(function(path) {checkDirectory(path)});
+  }
   var checkDatabases = function(checkDatabasesCb) {
     var checkEventsDb = function(cb) {
       livelyEventsDb.exists(function(exists) {
@@ -547,12 +565,13 @@ var startup = function() {
   };
   
   client.request('/_config/lively', function(err, response) {
-    viewPath = response.view_path;
+    handlerPath = response.handler_path;
     workerPath = response.worker_path;
     workerSourcePaths = JSON.parse(response.worker_source_paths);
     eventSourcePaths = JSON.parse(response.event_source_paths);
     logEvents = JSON.parse(response.log_to_couch);
     openStdin();
+    checkDirectories();
     checkDatabases(function() {
       writeAllEventsToCouch(function() {
         writeAllWorkersToCouch(function() {

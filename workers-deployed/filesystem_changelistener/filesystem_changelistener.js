@@ -30,12 +30,12 @@ var execute = function(parameters) {
     stopChangeListener(id);
   } else {
     if(parameters.eventArguments.query.path) var paths = [parameters.eventArguments.query.path];
-    if(parameters.eventArguments.query.paths) var paths = parameters.eventArguments.query.paths;
+    if(parameters.eventArguments.query.paths) var paths = JSON.parse(parameters.eventArguments.query.paths);
     var fileEndings = parameters.eventArguments.query.fileendings;
     var markChangedOnInit = parameters.eventArguments.query.mark_changed_on_start;
     var options = {};
-    if (fileEndings) options.fileEndings = fileEndings;
-    if (markChangedOnInit) options.markChangedOnInit = markChangedOnInit;
+    if (fileEndings) options.fileEndings = JSON.parse(fileEndings);
+    if (markChangedOnInit) options.markChangedOnInit = JSON.parse(markChangedOnInit);
     console.log(options);
     startChangeListener(listenerId, paths, options);  
   }
