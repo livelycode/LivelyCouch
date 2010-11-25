@@ -499,65 +499,31 @@ var startup = function() {
     paths.forEach(function(path) {checkDirectory(path)});
   }
   var checkDatabases = function(checkDatabasesCb) {
-    var checkEventsDb = function(cb) {
-      livelyEventsDb.exists(function(exists) {
+    var checkDatabase = function(db, designDocFile, designDocName, cb) {
+      db.exists(function(exists) {
         if(exists) {
           cb();
         } else {
-          livelyEventsDb.create(function() {
-            var designDoc = require('./designdocs/lively_events').ddoc;
-            stringifyFunctions(designDoc);
-            livelyEventsDb.saveDoc('_design/lively_events', designDoc, function(err, res) {
+          db.create(function() {
+            if(designDocFile) {
+              var designDoc = require(designDocFile).ddoc;
+              stringifyFunctions(designDoc);
+              db.saveDoc(designDocName, designDoc, function(err, res) {
+                cb();
+              });            
+            } else {
               cb();
-            });
+            }
           });
         }
-      });
+      });    
     };
-    var checkWorkersDb = function(cb) {
-      livelyWorkersDb.exists(function(exists) {
-        if(exists) {
-          cb();
-        } else {
-          livelyWorkersDb.create(cb);
-        }
-      })    
-    };
-    var checkHandlersDb = function(cb) {
-      livelyHandlersDb.exists(function(exists) {
-        if(exists) {
-          cb();
-        } else {
-          livelyHandlersDb.create(function() {
-            var designDoc = require('./designdocs/lively_handlers').ddoc;
-            stringifyFunctions(designDoc);
-            livelyHandlersDb.saveDoc('_design/lively_handlers', designDoc, function(err, res) {
-              cb();
-            });
-          });
-        }
-      })    
-    };
-    var checkLogsDb = function(cb) {
-      livelyLogsDb.exists(function(exists) {
-        if(exists) {
-          cb();
-        } else {
-          livelyLogsDb.create(function() {
-            var designDoc = require('./designdocs/lively_logs').ddoc;
-            stringifyFunctions(designDoc);
-            livelyLogsDb.saveDoc('_design/lively_logs', designDoc, function(err, res) {
-              cb();
-            });
-          });
-        }
-      })    
-    };
-    checkEventsDb(function() {
-      checkWorkersDb(function() {
-        checkHandlersDb(function() {
-          checkLogsDb(function() {
-            checkDatabasesCb();          
+    
+    checkDatabase(livelyEventsDb, './designdocs/lively_events', '_design/lively_events', function() {
+      checkDatabase(livelyWorkersDb, null, null, function() {
+        checkDatabase(livelyHandlersDb, './designdocs/lively_handlers', '_design/lively_handlers', function() {
+          checkDatabase(livelyLogsDb, './designdocs/lively_logs', '_design/lively_logs', function() {
+            checkDatabasesCb();
           })
         })
       })
