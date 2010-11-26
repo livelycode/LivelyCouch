@@ -320,6 +320,7 @@ var writeWorkerDocToCouch = function(file, docId, cb) {
 
 var writeDocToCouch = function(file, Db, docId, cb) {
   fs.readFile(file, 'utf8', function(err, data) {
+    console.log(file + '###' + data);
     var json = JSON.parse(data);
     Db.getDoc(docId, function(er, doc) {
       if(doc) {
@@ -546,7 +547,6 @@ var startup = function() {
         });
       });
     });
-
   });
 }
 
