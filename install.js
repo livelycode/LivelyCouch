@@ -32,12 +32,14 @@ var saveSettings = function(settings, timeout, cb) {
       data: JSON.stringify(setting[2]),
       responseEncoding: 'binary'
     }, function(err, res) {
-      console.log(err);
-      console.log(res);
-      if(settings.length > 0) {
-        setTimeout(function() {saveSettings(settings, timeout, cb)}, timeout);
+      if(err) {
+        console.log(err);
       } else {
-        cb();
+        if(settings.length > 0) {
+          setTimeout(function() {saveSettings(settings, timeout, cb)}, timeout);
+        } else {
+          cb();
+        }
       }
   });
 }
@@ -45,8 +47,7 @@ var saveSettings = function(settings, timeout, cb) {
 
 
 saveSettings(livelySettings, 0, function() {
-  console.log('done');
   saveSettings(couchSettings, 1000, function() {
-    console.log('done');
+    console.log('Installation successful. LivelyCouch has started. Time to live.');
   });
 });
