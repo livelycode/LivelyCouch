@@ -46,7 +46,7 @@ var saveSettings = function(settings, timeout, cb) {
 
 saveSettings(livelySettings, 0, function() {
   console.log('done');
-});
-saveSettings(couchSettings, 1000, function() {
-  console.log('done');
+  saveSettings(couchSettings, 1000, function() {
+    console.log('done');
+  });
 });
