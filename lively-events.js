@@ -21,7 +21,7 @@ var logEvents = false;
 
 var internalWorkers = {};
 
-var client = couchDb.createClient(5984, '127.0.0.1', 'lively', 'lively');
+var client = workerLib.client;
 var livelyEventsDbName = 'lively_events';
 var livelyWorkersDbName = 'lively_workers';
 var livelyHandlersDbName = 'lively_handlers';
@@ -320,7 +320,6 @@ var writeWorkerDocToCouch = function(file, docId, cb) {
 
 var writeDocToCouch = function(file, Db, docId, cb) {
   fs.readFile(file, 'utf8', function(err, data) {
-    console.log(file + '###' + data);
     var json = JSON.parse(data);
     Db.getDoc(docId, function(er, doc) {
       if(doc) {
