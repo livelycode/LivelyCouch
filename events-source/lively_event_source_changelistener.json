@@ -1,11 +1,15 @@
 {
    "trigger": [{
        "path": "/config_emitter/event_source_paths",
-       "method": "GET"
+       "method": "GET",
+       "parameters": {
+         "paths": ":paths"
+       }
    }],
    "workers": [{
        "name": "filesystem_changelistener",
        "parameters": {
+           "paths": ":paths",
            "listenerid": "event_source_changes",
            "fileendings": ["json"],
            "mark_changed_on_start": false

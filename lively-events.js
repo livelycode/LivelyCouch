@@ -82,10 +82,12 @@ var launchEventSystem = function() {
     } else {
       eventArguments.query = {};
       for(var queryParam in urlObject.query) {
-        try {
-          eventArguments.query[queryParam] = JSON.parse(urlObject.query[queryParam]);     
-        } catch(e) {
-          eventArguments.query[queryParam] = urlObject.query[queryParam];
+        if(queryParam != '') {
+          try {
+            eventArguments.query[queryParam] = JSON.parse(urlObject.query[queryParam]);     
+          } catch(e) {
+            eventArguments.query[queryParam] = urlObject.query[queryParam];
+          }
         }
       }
       if(!eventArguments.query) eventArguments.query = {};
@@ -97,6 +99,20 @@ var launchEventSystem = function() {
 }
 
 var handleHTTPEvent = function(eventName, eventArguments, response) {
+  response.writeHead(200, {'Content-Type': 'text/plain'});
+  response.end(JSON.stringify({received: true}));
+  var triggeredWorkers = [];
+  var event = {path: eventName, parameters: eventArguments.query, method: eventArguments.requestMethod};
+  if(eventArguments.postData) event.postData = eventArguments.postData;
+  var workers = resolveEventBindings.resolve(event, eventDefinitions);
+  workers.forEach(function(each) {
+    executeWorker(each.worker, {requestMethod: eventArguments.requestMethod, event: eventName, query: each.parameters});
+    triggeredWorkers.push({workerName: each.worker, eventArguments: each.parameters});
+  });
+  logEvent({eventMessage: eventName, eventArguments: eventArguments, triggeredWorkers: triggeredWorkers});
+}
+
+/*var handleHTTPEvent = function(eventName, eventArguments, response) {
   response.writeHead(200, {'Content-Type': 'text/plain'});
   response.end(JSON.stringify({received: true}));
   livelyEventsDb.view('lively_events', 'triggering-urls', {key: eventName}, function(err, resp) {
@@ -116,7 +132,7 @@ var handleHTTPEvent = function(eventName, eventArguments, response) {
     }
     logEvent({eventMessage: eventName, eventArguments: eventArguments, triggeredWorkers: triggeredWorkers});
   });    
-}
+}*/
 
 var logEvent = function(log) {
   if(logEvents) {
@@ -142,12 +158,10 @@ var createLivelyEventsChangeListener = function(cb) {
 }
 
 var updateEventDefinitions = function(cb) {
-  //console.log('### updating event definitions');
   livelyEventsDb.view('lively_events', 'triggering-urls-new', {}, function(err, resp) {
     var rows = resp.rows;
-    eventDefinitions = resp.rows;
-    workerLib.emitLivelyEvent(eventDefinitionsUpdated);
-    console.log(eventDefinitions);
+    eventDefinitions = resp.rows.map(function(each) {return each.value});
+    workerLib.emitLivelyEvent(eventDefinitionsUpdated, {});
     cb();
   });  
 }
