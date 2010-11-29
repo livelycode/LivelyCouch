@@ -22,7 +22,7 @@ dataStream.on('end', function() {
 });
 
 var execute = function(parameters) {
-  handlerSourcePaths = JSON.parse(parameters.eventArguments.query.paths);
+  handlerSourcePaths = JSON.parse(parameters.eventArguments.parameters.paths);
   for(var i in handlerSourcePaths) {
     startChangeListener(handlerSourcePaths[i]);    
   }

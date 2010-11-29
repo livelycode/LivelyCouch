@@ -27,15 +27,15 @@ dataStream.on('end', function() {
 //
 var execute = function(parameters) {
   var event = parameters.eventArguments.event;
-  var id = parameters.eventArguments.query.listenerid;
+  var id = parameters.eventArguments.parameters.listenerid;
   if(event == 'changelistener/stop') {
     stopChangeListener(id);
   } else {
-    var events = parameters.eventArguments.query.events;
-    var dbName = parameters.eventArguments.query.db;
-    var filter = parameters.eventArguments.query.filter;
-    var login = parameters.eventArguments.query.login;
-    var password = parameters.eventArguments.query.password;
+    var events = parameters.eventArguments.parameters.events;
+    var dbName = parameters.eventArguments.parameters.db;
+    var filter = parameters.eventArguments.parameters.filter;
+    var login = parameters.eventArguments.parameters.login;
+    var password = parameters.eventArguments.parameters.password;
     
     client = couchdb.createClient(5984, '127.0.0.1', login, password);
     startChangeListener(id, dbName, filter, events);  

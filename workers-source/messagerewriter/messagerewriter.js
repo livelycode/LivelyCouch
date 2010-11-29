@@ -27,12 +27,12 @@ dataStream.on('end', function() {
 
 var execute = function(parameters) {
   var event = parameters.eventArguments.event;
-  var id = parameters.eventArguments.query.rewriteid;
+  var id = parameters.eventArguments.parameters.rewriteid;
   if (event == 'rewrite/stop') {
     stopRewriteListener(id);
   } else {
-    var rewrites = JSON.parse(parameters.eventArguments.query.rewrites);
-    var filter = parameters.eventArguments.query.filter;
+    var rewrites = JSON.parse(parameters.eventArguments.parameters.rewrites);
+    var filter = parameters.eventArguments.parameters.filter;
 
     client = couchdb.createClient(5984, '127.0.0.1', login, password);
     startRewriteListener(id, dbName, filter, events);  

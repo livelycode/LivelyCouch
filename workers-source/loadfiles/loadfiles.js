@@ -21,10 +21,10 @@ dataStream.on('end', function() {
 });
 
 var execute = function(parameters) {
-  var folderPath = parameters.eventArguments.query.folderpath;
-  var filePath = parameters.eventArguments.query.filepath;
-  var docId = parameters.eventArguments.query.docid;
-  var dbName = parameters.eventArguments.query.db;
+  var folderPath = parameters.eventArguments.parameters.folderpath;
+  var filePath = parameters.eventArguments.parameters.filepath;
+  var docId = parameters.eventArguments.parameters.docid;
+  var dbName = parameters.eventArguments.parameters.db;
   var client = workerLib.client;
   var db = client.db(dbName);
   db.getDoc(docId, function(er, doc) {

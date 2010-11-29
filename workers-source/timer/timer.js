@@ -22,13 +22,13 @@ stdin.on('end', function () {
 });
 
 var execute = function(parameters) {
-  var timerID = parameters.eventArguments.query.timerid;
+  var timerID = parameters.eventArguments.parameters.timerid;
   var event = parameters.eventArguments.event;
   if (event == 'timer/stop') {
     stopTimer(timerID);
   } else {
-    var interval = parameters.eventArguments.query.interval;
-    var emittingEvents = JSON.parse(parameters.eventArguments.query.emittingevents);
+    var interval = parameters.eventArguments.parameters.interval;
+    var emittingEvents = JSON.parse(parameters.eventArguments.parameters.emittingevents);
     startTimer(timerID, interval, emittingEvents);  
   }
 }

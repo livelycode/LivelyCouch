@@ -106,33 +106,11 @@ var handleHTTPEvent = function(eventName, eventArguments, response) {
   if(eventArguments.postData) event.postData = eventArguments.postData;
   var workers = resolveEventBindings.resolve(event, eventDefinitions);
   workers.forEach(function(each) {
-    executeWorker(each.worker, {requestMethod: eventArguments.requestMethod, event: eventName, query: each.parameters});
+    executeWorker(each.worker, {requestMethod: eventArguments.requestMethod, event: eventName, parameters: each.parameters});
     triggeredWorkers.push({workerName: each.worker, eventArguments: each.parameters});
   });
   logEvent({eventMessage: eventName, eventArguments: eventArguments, triggeredWorkers: triggeredWorkers});
 }
-
-/*var handleHTTPEvent = function(eventName, eventArguments, response) {
-  response.writeHead(200, {'Content-Type': 'text/plain'});
-  response.end(JSON.stringify({received: true}));
-  livelyEventsDb.view('lively_events', 'triggering-urls', {key: eventName}, function(err, resp) {
-    var rows = resp.rows;
-    var triggeredWorkers = [];
-    for (var i in rows) {
-      for (var workerName in rows[i].value) {
-        var parameters = rows[i].value[workerName];
-        for (var param in parameters) {
-          if(!eventArguments.query[param]) {
-            eventArguments.query[param] = parameters[param];          
-          }
-        }
-        triggeredWorkers.push({workerName: workerName, eventArguments: eventArguments});
-        executeWorker(workerName, eventArguments);
-      }
-    }
-    logEvent({eventMessage: eventName, eventArguments: eventArguments, triggeredWorkers: triggeredWorkers});
-  });    
-}*/
 
 var logEvent = function(log) {
   if(logEvents) {
@@ -499,7 +477,7 @@ var executeExternalWorker = function(workerName, eventArguments) {
 
 // start internal Workers
 internalWorkers.resetWorker = function(params) {
-  workerName = params.query.workername;
+  workerName = params.parameters.workername;
   if(runningWorkers[workerName]) {
     var oldWorker = runningWorkers[workerName].worker;
     runningWorkers[workerName] = null;
@@ -512,7 +490,7 @@ internalWorkers.resetWorker = function(params) {
 }
 
 internalWorkers.writeWorkerToDisk = function(params) {
-  workerName = params.query.workername;
+  workerName = params.parameters.workername;
   writeOutLivelyWorkerCode(workerName, function(workerNameWritten) {
     if(workerNameWritten) {
       //console.log('###original: ' + workerName + ' got back: ' + workerNameWritten);
@@ -522,8 +500,8 @@ internalWorkers.writeWorkerToDisk = function(params) {
 }
 
 internalWorkers.writeWorkerToCouch = function(params) {
-  var workersDir = params.query.workersdirectory;
-  var workerName = workerName = params.query.workername;
+  var workersDir = params.parameters.workersdirectory;
+  var workerName = workerName = params.parameters.workername;
   writeWorkerToCouch(workersDir, workerName, function() {
     //worker written
   });
