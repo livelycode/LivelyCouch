@@ -7,9 +7,7 @@ var workerLib = require('../../lib/workerlib');
 var couchdb = workerLib.couchdb;
 
 var name = 'changelistener';
-//var messages = {stop: };
 workerLib.setEventNamespace(name);
-//workerLib.messages = messages;
 
 var client;
 
@@ -24,18 +22,18 @@ dataStream.on('data', function(d) {
 dataStream.on('end', function() {
   process.exit(0);
 });
-//
-var execute = function(parameters) {
-  var event = parameters.event.path;
-  var id = parameters.event.parameters.listenerid;
+
+var execute = function(data) {
+  var event = data.event.path;
+  var id = data.event.parameters.listenerid;
   if(event == 'changelistener/stop') {
     stopChangeListener(id);
   } else {
-    var events = parameters.event.parameters.events;
-    var dbName = parameters.event.parameters.db;
-    var filter = parameters.event.parameters.filter;
-    var login = parameters.event.parameters.login;
-    var password = parameters.event.parameters.password;
+    var events = data.event.parameters.events;
+    var dbName = data.event.parameters.db;
+    var filter = data.event.parameters.filter;
+    var login = data.event.parameters.login;
+    var password = data.event.parameters.password;
     
     client = couchdb.createClient(5984, '127.0.0.1', login, password);
     startChangeListener(id, dbName, filter, events);  

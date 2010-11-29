@@ -19,13 +19,13 @@ dataStream.on('end', function() {
   process.exit(0);
 });
 
-var execute = function(parameters) {
-  var filePath = parameters.event.parameters.filepath;
-  var docId = parameters.event.parameters.docid;
+var execute = function(data) {
+  var filePath = data.event.parameters.filepath;
+  var docId = data.event.parameters.docid;
   if(!docId) {
     docId = path.basename(filePath, path.extname(filePath));
   }
-  var dbName = parameters.event.parameters.db;
+  var dbName = data.event.parameters.db;
   var db = workerLib.client.db(dbName);
   writeDocToCouch(filePath, db, docId, function() {
     workerLib.emitLivelyEvent('document_loaded', {filepath: filePath, docid: docId, db: dbName});

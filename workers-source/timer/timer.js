@@ -21,13 +21,13 @@ stdin.on('end', function () {
 
 });
 
-var execute = function(parameters) {
-  var timerID = parameters.event.parameters.timerid;
-  var event = parameters.event.path;
+var execute = function(data) {
+  var timerID = data.event.parameters.timerid;
+  var event = data.event.path;
   if (event == 'timer/stop') {
     stopTimer(timerID);
   } else {
-    var interval = parameters.event.parameters.interval;
+    var interval = data.event.parameters.interval;
     var emittingEvents = JSON.parse(parameters.event.parameters.emittingevents);
     startTimer(timerID, interval, emittingEvents);  
   }

@@ -546,15 +546,12 @@ var startup = function() {
       });    
     };
     
-    checkDatabase(livelyEventsDb, './designdocs/lively_events', '_design/lively_events', function() {
-      checkDatabase(livelyWorkersDb, null, null, function() {
-        checkDatabase(livelyHandlersDb, './designdocs/lively_handlers', '_design/lively_handlers', function() {
-          checkDatabase(livelyLogsDb, './designdocs/lively_logs', '_design/lively_logs', function() {
-            checkDatabasesCb();
-          })
-        })
-      })
-    })
+    doParallel([
+      function(cb) {checkDatabase(livelyEventsDb, './designdocs/lively_events', '_design/lively_events', cb)},
+      function(cb) {checkDatabase(livelyWorkersDb, null, null, cb)},
+      function(cb) {checkDatabase(livelyHandlersDb, './designdocs/lively_handlers', '_design/lively_handlers', cb)},
+      function(cb) {checkDatabase(livelyLogsDb, './designdocs/lively_logs', '_design/lively_logs', cb)}
+    ], checkDatabasesCb);
   };
   
   client.request('/_config/lively', function(err, response) {
@@ -565,17 +562,16 @@ var startup = function() {
     logEvents = JSON.parse(response.log_to_couch);
     openStdin();
     checkDirectories();
-    checkDatabases(function() {
-      writeAllEventsToCouch(function() {
-        writeAllWorkersToCouch(function() {
-            createLivelyEventsChangeListener(function() {
-              launchEventSystem();
-              createLivelyWorkerChangeListener();            
-            });
-
-        });
-      });
-    });
+    doLinear([
+        function(cb) {checkDatabases(cb)},
+        function(cb) {writeAllEventsToCouch(cb)},
+        function(cb) {writeAllWorkersToCouch(cb)},
+        function(cb) {createLivelyEventsChangeListener(cb)}
+      ], function() {
+        launchEventSystem();
+        createLivelyWorkerChangeListener();
+      }
+    );
   });
 }
 
@@ -587,7 +583,30 @@ function object(o) {
 function copyArray(a) {
   return a.map(function(value) {return value});
 }
-var stringifyFunctions = function (x) {
+
+function doParallel(functions, cb) {
+  var count = functions.length;
+  functions.forEach(function(each) {
+    each(function() {
+      count--;
+      if(count == 0) cb();
+    })
+  })
+}
+
+function doLinear(functions, cb) {
+  if(functions.length > 0) {
+    var currentFunction = functions.pop();
+    currentFunction(function() {
+        doLinear(functions, cb);
+    });
+  }
+  else {
+    cb();
+  }
+}
+
+function stringifyFunctions(x) {
   for (i in x) {
     if (i[0] != '_') {
       if (typeof x[i] == 'function') {

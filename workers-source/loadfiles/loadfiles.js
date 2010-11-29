@@ -20,11 +20,11 @@ dataStream.on('end', function() {
   process.exit(0);
 });
 
-var execute = function(parameters) {
-  var folderPath = parameters.event.parameters.folderpath;
-  var filePath = parameters.event.parameters.filepath;
-  var docId = parameters.event.parameters.docid;
-  var dbName = parameters.event.parameters.db;
+var execute = function(data) {
+  var folderPath = data.event.parameters.folderpath;
+  var filePath = data.event.parameters.filepath;
+  var docId = data.event.parameters.docid;
+  var dbName = data.event.parameters.db;
   var client = workerLib.client;
   var db = client.db(dbName);
   db.getDoc(docId, function(er, doc) {
@@ -37,7 +37,7 @@ var execute = function(parameters) {
       }
     } else {
       db.saveDoc(docId, {}, function(err, newDoc) {
-        if(!newDoc) return execute(parameters);
+        if(!newDoc) return execute(data);
         if(folderPath) {
           loadFolder(folderPath, db, docId, newDoc.rev);  
         }

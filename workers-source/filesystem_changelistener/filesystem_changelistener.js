@@ -23,16 +23,16 @@ dataStream.on('end', function() {
   process.exit(0);
 });
 
-var execute = function(parameters) {
-  var event = parameters.event.path;
-  var listenerId = parameters.event.parameters.listenerid;
+var execute = function(data) {
+  var event = data.event.path;
+  var listenerId = data.event.parameters.listenerid;
   if (event == 'filesystem_changelistener/stop') {
     stopChangeListener(id);
   } else {
     if(parameters.event.parameters.path) var paths = [parameters.event.parameters.path];
-    if(parameters.event.parameters.paths) var paths = parameters.event.parameters.paths;
-    var fileEndings = parameters.event.parameters.fileendings;
-    var markChangedOnInit = parameters.event.parameters.mark_changed_on_start;
+    if(parameters.event.parameters.paths) var paths = data.event.parameters.paths;
+    var fileEndings = data.event.parameters.fileendings;
+    var markChangedOnInit = data.event.parameters.mark_changed_on_start;
     var options = {};
     if (fileEndings) options.fileEndings = fileEndings;
     if (markChangedOnInit) options.markChangedOnInit = markChangedOnInit;

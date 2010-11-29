@@ -21,7 +21,7 @@ dataStream.on('end', function() {
   process.exit(0);
 });
 
-var execute = function(parameters) {
+var execute = function(data) {
   handlerSourcePaths = JSON.parse(parameters.event.parameters.paths);
   for(var i in handlerSourcePaths) {
     startChangeListener(handlerSourcePaths[i]);    

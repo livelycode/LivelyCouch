@@ -21,7 +21,7 @@ dataStream.on('end', function() {
   process.exit(0);
 });
 
-var execute = function(parameters) {
+var execute = function(data) {
   workerLib.client.request('/_config/lively', function(err, response) {
     for(var entry in response) {
       if(entry.indexOf('paths') > -1) {

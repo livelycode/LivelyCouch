@@ -15,11 +15,11 @@ dataStream.on('data', function(d) {
   execute(d);
 });
 
-var execute = function(parameters) {
+var execute = function(data) {
   var client = workerLib.client;
   client.request('/_config/lively', function(err, response) {
     var handlerPath = response.handler_path;
-    var docId = parameters.event.parameters.docid;
+    var docId = data.event.parameters.docid;
     var dbName = 'lively_handlers';
     writeOutAttachments(client,dbName, docId, handlerPath, function() {
       workerLib.emitLivelyEvent('attachments_written', {docid:docId, dbname:dbName, folderpath:handlerPath})
