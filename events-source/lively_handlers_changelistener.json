@@ -1,22 +1,24 @@
 {
-   "trigger": {
-       "/lively_events/lively_events_started": {
-           "method": "GET"
-       },
-       "/lively_events/worker_reset/changelistener": {
-           "method": "GET"
-       },
-       "/changelistener/listen_handler_changes": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "changelistener": {
+   "trigger": [
+     {
+       "path": "/lively_events/lively_events_started",
+       "method": "GET"
+     }, {
+       "path": "/lively_events/worker_reset/changelistener",
+       "method": "GET"
+     }, {
+       "path": "/changelistener/listen_handler_changes",
+       "method": "GET"
+     }
+   ],
+   "workers": [{
+       "name": "changelistener",
+       "parameters": {
            "listenerid": "handler_listener",
            "db": "lively_handlers",
            "events": ["handler_changed"],
            "login": "lively",
            "password": "lively"
        }
-   }
+   }]
 }

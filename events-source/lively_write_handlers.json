@@ -1,11 +1,11 @@
 {
-   "trigger": {
-       "/changelistener/handler_changed": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "write_handler": {
-       }
-   }
+   "trigger": [{
+     "path": "/changelistener/handler_changed",
+     "method": "GET",
+     "parameters": {}
+   }],
+   "workers": [{
+     "name": "write_handler",
+     "parameters": {}
+   }]
 }

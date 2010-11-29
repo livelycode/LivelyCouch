@@ -1,12 +1,10 @@
 {
    "type": "HTTP",
-   "trigger": {
-       "/lively_events/worker_written": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "reset_worker": {
-       }
-   }
+   "trigger": [{
+       "path": "/lively_events/worker_written",
+       "method": "GET"
+   }],
+   "workers": [{
+       "name": "reset_worker"
+   }]
 }

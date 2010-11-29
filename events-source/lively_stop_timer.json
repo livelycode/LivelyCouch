@@ -1,11 +1,9 @@
 {
-   "trigger": {
-       "/timer/stop": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "timer": {
-       }
-   }
+   "trigger": [{
+     "path": "/timer/stop",
+     "method": "GET"
+   }],
+   "workers": [{
+     "name": "timer"
+   }]
 }

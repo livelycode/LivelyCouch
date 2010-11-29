@@ -1,11 +1,11 @@
 {
-   "trigger": {
-       "/writefiles": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "writefiles": {
-       }
-   }
+  "trigger": [{
+    "path": "/writefiles",
+    "method": "GET",
+    "parameters": {}
+  }],
+  "workers": [{
+    "name": "writefiles",
+    "parameters": {}
+   }]
 }

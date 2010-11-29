@@ -1,14 +1,14 @@
 {
-   "trigger": {
-       "/config_emitter/event_source_paths": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "filesystem_changelistener": {
+   "trigger": [{
+       "path": "/config_emitter/event_source_paths",
+       "method": "GET"
+   }],
+   "workers": [{
+       "name": "filesystem_changelistener",
+       "parameters": {
            "listenerid": "event_source_changes",
            "fileendings": ["json"],
            "mark_changed_on_start": false
        }
-   }
+   }]
 }

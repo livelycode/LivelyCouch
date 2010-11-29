@@ -1,11 +1,9 @@
 {
-   "trigger": {
-       "/config_emitter/handler_source_paths": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "handler_source_changelistener": {
-       }
-   }
+   "trigger": [{
+       "path": "/config_emitter/handler_source_paths",
+       "method": "GET"
+   }],
+   "workers": [{
+       "name": "handler_source_changelistener"
+   }]
 }

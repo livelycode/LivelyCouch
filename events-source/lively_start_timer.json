@@ -1,12 +1,10 @@
 {
    "type": "HTTP",
-   "trigger": {
-       "/timer/start": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "timer": {
-       }
-   }
+   "trigger": [{
+     "path": "/timer/start",
+     "method": "GET"
+   }],
+   "workers": [{
+     "name": "timer"
+   }]
 }

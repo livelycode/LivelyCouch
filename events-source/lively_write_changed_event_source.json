@@ -1,15 +1,17 @@
 {
-   "trigger": {
-       "/filesystem_changelistener/event_source_changes/file_changed": {
-           "method": "GET"
-       },
-       "/filesystem_changelistener/event_source_changes/file_created": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "load_document": {
-           "db": "lively_events"
-       }
-   }
+   "trigger": [
+     {
+       "path": "/filesystem_changelistener/event_source_changes/file_changed",
+       "method": "GET"
+     }, {
+       "path": "/filesystem_changelistener/event_source_changes/file_created",
+       "method": "GET"
+     }
+   ],
+   "workers": [{
+     "name": "load_document",
+     "parameters": {
+        "db": "lively_events"
+      }
+   }]
 }

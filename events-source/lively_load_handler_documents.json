@@ -1,12 +1,12 @@
 {
-   "trigger": {
-       "/handler_source_changelistener/handler_source_changed/json": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "load_document": {
+   "trigger": [{
+       "path": "/handler_source_changelistener/handler_source_changed/json",
+       "method": "GET"
+   }],
+   "workers": [{
+       "name": "load_document",
+       "parameters": {
            "db": "lively_handlers"
        }
-   }
+   }]
 }

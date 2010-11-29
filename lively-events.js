@@ -7,17 +7,19 @@ var spawn = require('child_process').spawn;
 var Script = process.binding('evals').Script;
 var EventEmitter = require('events').EventEmitter;
 var workerLib = require('./lib/workerlib');
+var resolveEventBindings = require('./lib/pattern_matching/resolve_bindings');
+
 var couchDb = workerLib.couchdb;
 var mustache = require('./lib/mustache');
 var watch = require('./lib/watch');
 
-//values are being initialized in startup()
+//these values are being initialized in startup()
 var workerPath;
 var handlerPath;
 var workerSourcePaths = [];
 var eventSourcePaths = [];
 var logEvents = false;
-
+//
 
 var internalWorkers = {};
 
@@ -27,16 +29,20 @@ var livelyWorkersDbName = 'lively_workers';
 var livelyHandlersDbName = 'lively_handlers';
 var livelyLogsDbName = 'lively_logs';
 
-var eventNamespace = 'lively_events';
-workerLib.setEventNamespace(eventNamespace);
+workerLib.setEventNamespace('lively_events');
 
-//configurable event emits
+// configurable event emits
 var emitEvents = true;
 var startUpEvent = 'lively_events_started';
 var stopEvent = 'lively_events_stopped';
 
 var workerChangeListenerStarted = 'worker_change_listener_started';
 var workerChangeListenerStopped = 'worker_change_listener_started';
+
+var eventChangeListenerStarted = 'event_change_listener_started';
+var eventChangeListenerStopped = 'event_change_listener_started';
+
+var eventDefinitionsUpdated = 'event_definitions_updated';
 
 var workerStart = 'worker_started';
 var workerExecuted = 'worker_executed';
@@ -46,12 +52,14 @@ var workerError = 'worker_error';
 var workerSourceChanged = 'worker_source_changed';
 var workerReady = 'worker_ready';
 var workerReset = 'worker_reset';
+// end configurable event emits
 
 var livelyEventsDb = client.db(livelyEventsDbName);
 var livelyWorkersDb = client.db(livelyWorkersDbName);
 var livelyHandlersDb = client.db(livelyHandlersDbName);
 var livelyLogsDb = client.db(livelyLogsDbName);
 
+var eventDefinitions = [];
 var runningWorkers = {};
 var readyWorkers = {};
 var workerQueue = [];
@@ -117,6 +125,33 @@ var logEvent = function(log) {
   }
 }
 
+var createLivelyEventsChangeListener = function(cb) {
+  livelyEventsDb.changes({},function(err, res) {
+    workerLib.emitLivelyEvent(eventChangeListenerStarted);
+    var changeListener = createChangeListener(livelyEventsDbName, {since: res.last_seq});
+    changeListener.on('data', function(data) {
+      updateEventDefinitions(function() {});
+    });
+    changeListener.on('end', function(err) {
+      workerLib.emitLivelyEvent(eventChangeListenerStopped);
+    });
+    updateEventDefinitions(function() {
+      cb();    
+    })
+  });
+}
+
+var updateEventDefinitions = function(cb) {
+  //console.log('### updating event definitions');
+  livelyEventsDb.view('lively_events', 'triggering-urls-new', {}, function(err, resp) {
+    var rows = resp.rows;
+    eventDefinitions = resp.rows;
+    workerLib.emitLivelyEvent(eventDefinitionsUpdated);
+    console.log(eventDefinitions);
+    cb();
+  });  
+}
+
 var createLivelyWorkerChangeListener = function(failCount) {
   var changeListener = createChangeListener(livelyWorkersDbName);
   workerLib.emitLivelyEvent(workerChangeListenerStarted);
@@ -138,7 +173,7 @@ var createLivelyWorkerChangeListener = function(failCount) {
 
 var createChangeListener = function(Db, query) {
   var DbInstance = client.db(Db);
-  changeEmitter = DbInstance.changesStream();
+  changeEmitter = DbInstance.changesStream(query);
   return changeEmitter;
 }
 
@@ -541,8 +576,11 @@ var startup = function() {
     checkDatabases(function() {
       writeAllEventsToCouch(function() {
         writeAllWorkersToCouch(function() {
-            launchEventSystem();
-            createLivelyWorkerChangeListener();
+            createLivelyEventsChangeListener(function() {
+              launchEventSystem();
+              createLivelyWorkerChangeListener();            
+            });
+
         });
       });
     });

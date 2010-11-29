@@ -1,12 +1,10 @@
 {
-   "trigger": {
-       "/config_emitter/worker_source_paths": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "worker_source_changelistener": {
-       }
-   },
+   "trigger": [{
+     "path": "/config_emitter/worker_source_paths",
+     "method": "GET"
+   }],
+   "workers": [{
+     "name": "worker_source_changelistener"
+   }],
    "disabled": false
 }

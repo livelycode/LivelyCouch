@@ -1,11 +1,9 @@
 {
-   "trigger": {
-       "/changelistener/stop": {
-           "method": "GET"
-       }
-   },
-   "workers": {
-       "changelistener": {
-       }
-   }
+   "trigger": [{
+     "path": "/changelistener/stop",
+     "method": "GET"
+   }],
+   "workers": [{
+     "name": "changelistener"
+   }]
 }
