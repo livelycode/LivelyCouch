@@ -16,11 +16,11 @@ dataStream.on('data', function(d) {
 });
 
 var execute = function(parameters) {
-  var folderPath = parameters.eventArguments.parameters.path;
-  var docId = parameters.eventArguments.parameters.docid;
-  var dbName = parameters.eventArguments.parameters.db;
-  var login = parameters.eventArguments.parameters.login;
-  var password = parameters.eventArguments.parameters.password;
+  var folderPath = parameters.event.parameters.path;
+  var docId = parameters.event.parameters.docid;
+  var dbName = parameters.event.parameters.db;
+  var login = parameters.event.parameters.login;
+  var password = parameters.event.parameters.password;
   var client = couchdb.createClient(5984, '127.0.0.1', login, password);
   writeOutAttachments(client,dbName, docId, folderPath, function() {
     workerLib.emitLivelyEvent('attachments_written', {docid:docId, dbname:dbName, folderpath:folderPath})

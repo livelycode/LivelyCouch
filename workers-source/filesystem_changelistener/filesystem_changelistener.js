@@ -24,15 +24,15 @@ dataStream.on('end', function() {
 });
 
 var execute = function(parameters) {
-  var event = parameters.eventArguments.event;
-  var listenerId = parameters.eventArguments.parameters.listenerid;
+  var event = parameters.event.path;
+  var listenerId = parameters.event.parameters.listenerid;
   if (event == 'filesystem_changelistener/stop') {
     stopChangeListener(id);
   } else {
-    if(parameters.eventArguments.parameters.path) var paths = [parameters.eventArguments.parameters.path];
-    if(parameters.eventArguments.parameters.paths) var paths = parameters.eventArguments.parameters.paths;
-    var fileEndings = parameters.eventArguments.parameters.fileendings;
-    var markChangedOnInit = parameters.eventArguments.parameters.mark_changed_on_start;
+    if(parameters.event.parameters.path) var paths = [parameters.event.parameters.path];
+    if(parameters.event.parameters.paths) var paths = parameters.event.parameters.paths;
+    var fileEndings = parameters.event.parameters.fileendings;
+    var markChangedOnInit = parameters.event.parameters.mark_changed_on_start;
     var options = {};
     if (fileEndings) options.fileEndings = fileEndings;
     if (markChangedOnInit) options.markChangedOnInit = markChangedOnInit;

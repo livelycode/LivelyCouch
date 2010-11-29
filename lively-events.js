@@ -106,7 +106,7 @@ var handleHTTPEvent = function(eventName, eventArguments, response) {
   if(eventArguments.postData) event.postData = eventArguments.postData;
   var workers = resolveEventBindings.resolve(event, eventDefinitions);
   workers.forEach(function(each) {
-    executeWorker(each.worker, {requestMethod: eventArguments.requestMethod, event: eventName, parameters: each.parameters});
+    executeWorker(each.worker, {requestMethod: eventArguments.requestMethod, path: eventName, parameters: each.parameters});
     triggeredWorkers.push({workerName: each.worker, eventArguments: each.parameters});
   });
   logEvent({eventMessage: eventName, eventArguments: eventArguments, triggeredWorkers: triggeredWorkers});
@@ -448,8 +448,8 @@ var executeExternalWorker = function(workerName, eventArguments) {
     } else {
       var scriptName = doc.delegate;
       var arguments = doc.arguments;
-      arguments.path = workerPath + workerName + '/';
-      arguments.eventArguments = eventArguments;
+      arguments.source_path = workerPath + workerName + '/';
+      arguments.event = eventArguments;
       
       if(runningWorkers[workerName]) {
         var worker = runningWorkers[workerName].worker;

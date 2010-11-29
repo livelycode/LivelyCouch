@@ -20,12 +20,12 @@ dataStream.on('end', function() {
 });
 
 var execute = function(parameters) {
-  var filePath = parameters.eventArguments.parameters.filepath;
-  var docId = parameters.eventArguments.parameters.docid;
+  var filePath = parameters.event.parameters.filepath;
+  var docId = parameters.event.parameters.docid;
   if(!docId) {
     docId = path.basename(filePath, path.extname(filePath));
   }
-  var dbName = parameters.eventArguments.parameters.db;
+  var dbName = parameters.event.parameters.db;
   var db = workerLib.client.db(dbName);
   writeDocToCouch(filePath, db, docId, function() {
     workerLib.emitLivelyEvent('document_loaded', {filepath: filePath, docid: docId, db: dbName});

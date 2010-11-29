@@ -26,16 +26,16 @@ dataStream.on('end', function() {
 });
 //
 var execute = function(parameters) {
-  var event = parameters.eventArguments.event;
-  var id = parameters.eventArguments.parameters.listenerid;
+  var event = parameters.event.path;
+  var id = parameters.event.parameters.listenerid;
   if(event == 'changelistener/stop') {
     stopChangeListener(id);
   } else {
-    var events = parameters.eventArguments.parameters.events;
-    var dbName = parameters.eventArguments.parameters.db;
-    var filter = parameters.eventArguments.parameters.filter;
-    var login = parameters.eventArguments.parameters.login;
-    var password = parameters.eventArguments.parameters.password;
+    var events = parameters.event.parameters.events;
+    var dbName = parameters.event.parameters.db;
+    var filter = parameters.event.parameters.filter;
+    var login = parameters.event.parameters.login;
+    var password = parameters.event.parameters.password;
     
     client = couchdb.createClient(5984, '127.0.0.1', login, password);
     startChangeListener(id, dbName, filter, events);  
