@@ -1,5 +1,5 @@
 {
-  "delegate":"file_to_execute.js",
+  "delegate":"example_file_to_execute.js",
   "parameters": [
     {
       "name": "some_fixed_parameter",
