@@ -12,7 +12,7 @@ To read more about LivelyCouch, have a look at our website:
 ##Installation
 
 First install the latest version of CouchDB - easiest way is to use build-couchdb:
-    git clone git://github.com/couchone/build-couchdb
+    git clone git@github.com:livelycouch/build-couchdb.git
     cd build-couchdb
     git submodule init
     git submodule update
