@@ -12,7 +12,7 @@ To read more about LivelyCouch, have a look at our website:
 ##Installation
 
 First install the latest version of CouchDB - easiest way is to use build-couchdb:
-    git clone git@github.com:livelycouch/build-couchdb.git
+    git clone https://github.com/livelycouch/build-couchdb.git
     cd build-couchdb
     git submodule init
     git submodule update
@@ -27,7 +27,7 @@ Add an Admin user with login: "lively" and password: "lively".
 Make sure you have [Node.js](http://www.nodejs.org) installed.
 
 Now, get the LivelyCouch source and run the install script:
-    git clone git@github.com:livelycouch/LivelyCouch.git
+    git clone https://github.com/livelycouch/LivelyCouch.git
     cd LivelyCouch
     node install.js
 
