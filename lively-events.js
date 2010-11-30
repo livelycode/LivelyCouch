@@ -122,7 +122,11 @@ var logEvent = function(log) {
 var createLivelyEventsChangeListener = function(cb) {
   livelyEventsDb.changes({},function(err, res) {
     workerLib.emitLivelyEvent(eventChangeListenerStarted);
-    var changeListener = createChangeListener(livelyEventsDbName, {since: res.last_seq});
+    if(res.last_seq) {
+      var changeListener = createChangeListener(livelyEventsDbName, {since: res.last_seq});    
+    } else {
+      var changeListener = createChangeListener(livelyEventsDbName, {since: res.last_seq});
+    }
     changeListener.on('data', function(data) {
       updateEventDefinitions(function() {});
     });
