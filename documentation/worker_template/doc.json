@@ -1,0 +1,29 @@
+{
+  "delegate":"file_to_execute.js",
+  "parameters": [
+    {
+      "name": "some_fixed_parameter",
+      "value": "some_fixed_value"
+    }
+  ],
+  "documentation": {
+    "description": "some description -- pulled in from README"
+    "expected_parameters": [
+      {
+        "name": "parameter name",
+        "type": "String"|"Number"|"URL"|"Path"
+      }
+    ],
+    "emitted_events": [
+      {
+        "path": "message path",
+        "parameters": [
+          {
+            "name": "parameter name",
+            "type": "String"|"Number"|"URL"|"Path"           
+          }
+        ]
+      }
+    ]   
+  }
+}

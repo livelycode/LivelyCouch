@@ -451,7 +451,8 @@ var executeExternalWorker = function(workerName, eventArguments) {
       workerLib.emitLivelyEvent(workerError + '/' + workerName, {workername: workerName});
     } else {
       var scriptName = doc.delegate;
-      var arguments = doc.arguments;
+      var arguments = doc.parameters;
+      if(!arguments) arguments = {};
       arguments.source_path = workerPath + workerName + '/';
       arguments.event = eventArguments;
       
