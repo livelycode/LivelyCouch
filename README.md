@@ -22,7 +22,9 @@ First install the latest version of CouchDB - easiest way is to use build-couchd
 Launch CouchDB:
     build/bin/couchdb
     
-Add an Admin user with login: "lively" and password: "lively"
+Add an Admin user with login: "lively" and password: "lively".
+
+Make sure you have [Node.js](http://www.nodejs.org) installed.
 
 Now, get the LivelyCouch source and run the install script:
     git clone git@github.com:livelycouch/LivelyCouch.git
