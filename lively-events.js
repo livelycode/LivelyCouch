@@ -599,6 +599,7 @@ function doParallel(functions, cb) {
 }
 
 function doLinear(functions, cb) {
+  functions.reverse();
   if(functions.length > 0) {
     var currentFunction = functions.pop();
     currentFunction(function() {
