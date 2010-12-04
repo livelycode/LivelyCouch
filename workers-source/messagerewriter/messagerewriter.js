@@ -31,7 +31,7 @@ var execute = function(data) {
   if (event == 'rewrite/stop') {
     stopRewriteListener(id);
   } else {
-    var rewrites = JSON.parse(parameters.event.parameters.rewrites);
+    var rewrites = data.event.parameters.rewrites;
     var filter = data.event.parameters.filter;
 
     client = couchdb.createClient(5984, '127.0.0.1', login, password);

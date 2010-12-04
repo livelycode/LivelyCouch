@@ -29,8 +29,6 @@ var sys = require('sys');
 var email = {
   send: function (options) {
     var options = typeof(options) == "undefined" ? {} : options;
-    options.to = typeof(options.to) == "undefined" ? "marak.squires@gmail.com" : options.to;
-    options.from = typeof(options.from) == "undefined" ? "obama@whitehouse.gov" : options.from;
     options.subject = typeof(options.subject) == "undefined" ? "node_mailer test email" : options.subject;
     options.body = typeof(options.body) == "undefined" ? "hello this is a test email from the node_mailer" : options.body;  
     options.host = typeof(options.host) == "undefined" ? "localhost" : options.host;
@@ -38,11 +36,12 @@ var email = {
     options.port = typeof(options.port) == "undefined" ? 25 : options.port;
         
     var self = this;
-
+    var connectionActive = false;
     this.connection = tcp.createConnection(options.port, options.host);
     this.connection.setEncoding('utf8');
     this.connection.addListener("connect", function () {
-      self.connection.write("helo " + options.domain + "\r\n");
+      connectionActive = true;
+      self.connection.write("hello " + options.domain + "\r\n");
       if(options.authentication === "login") {
         self.connection.write("auth login\r\n");
         self.connection.write(options.username + "\r\n");
@@ -58,16 +57,19 @@ var email = {
       self.connection.write(email.wordwrap(options.body) + "\r\n");
       self.connection.write(".\r\n");
       self.connection.write("quit\r\n");
-      self.connection.end();
+      setTimeout(function() {if(connectionActive) {self.connection.end();}}, 100);
     });
-
+    this.connection.on('end', function() {
+      connectionActive = false;
+      //console.log("connection closed by remote end");
+    });
     this.connection.addListener("data", function (data) {
         if(email.parseResponse(data)){
-          sys.puts("SUCC");
+          //console.log("SUCC");
         } else{
-          sys.puts("ERR");
+          //console.log("ERR");
         }
-        sys.puts(data);
+        //sys.puts(data);
     });
   },
 

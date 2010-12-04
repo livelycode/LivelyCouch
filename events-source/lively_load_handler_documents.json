@@ -1,8 +1,19 @@
 {
-   "trigger": [{
-       "path": "/handler_source_changelistener/handler_source_changed/json",
-       "method": "GET"
-   }],
+   "trigger": [
+     {
+       "path": "/filesystem_changelistener/file_changed",
+       "parameters": {
+         "listenerid": "handler_source_changes",
+         "fileending": ".json"
+       }
+     }, {
+       "path": "/filesystem_changelistener/file_created",
+       "parameters": {
+         "listenerid": "handler_source_changes",
+         "fileending": ".json"
+       }
+     }
+   ],
    "workers": [{
        "name": "load_document",
        "parameters": {

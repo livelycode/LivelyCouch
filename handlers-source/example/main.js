@@ -7,4 +7,3 @@ exports.run = function(arguments, response, viewLib) {
   response.write('test');
   response.end();
 }
-//

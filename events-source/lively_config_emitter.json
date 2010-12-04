@@ -1,9 +1,0 @@
-{
-   "trigger": [{
-       "path": "/lively_events/lively_events_started",
-       "method": "GET"
-   }],
-   "workers": [{
-       "name": "config_emitter"
-   }]
-}

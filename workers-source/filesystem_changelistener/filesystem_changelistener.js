@@ -3,6 +3,7 @@ var http = require('http');
 var url = require('url');
 var sys = require('sys');
 var fs = require('fs');
+var path = require('path');
 var workerLib = require('../../lib/workerlib');
 var watch = require('../../lib/watch');
 
@@ -29,24 +30,23 @@ var execute = function(data) {
   if (event == 'filesystem_changelistener/stop') {
     stopChangeListener(id);
   } else {
-    if(parameters.event.parameters.path) var paths = [parameters.event.parameters.path];
-    if(parameters.event.parameters.paths) var paths = data.event.parameters.paths;
+    if(data.event.parameters.path) var paths = [data.event.parameters.path];
+    if(data.event.parameters.paths) var paths = data.event.parameters.paths;
     var fileEndings = data.event.parameters.fileendings;
     var markChangedOnInit = data.event.parameters.mark_changed_on_start;
     var options = {};
     if (fileEndings) options.fileEndings = fileEndings;
     if (markChangedOnInit) options.markChangedOnInit = markChangedOnInit;
-    console.log(options);
     startChangeListener(listenerId, paths, options);  
   }
 }
 
 var startChangeListener = function(listenerId, paths, options) {
   stopChangeListener(listenerId);
-  var validFile = function(path) {
+  var validFile = function(filePath) {
     if(options.fileEndings) {
       for(var i in options.fileEndings) {
-        if(path.indexOf(options.fileEndings[i]) > -1) {
+        if(path.extname(filePath) == options.fileEndings[i]) {
           return true
         }
       }
@@ -59,30 +59,34 @@ var startChangeListener = function(listenerId, paths, options) {
     var files = fs.readdirSync(folderPath);
     for (var i in files) {
       if (validFile(files[i])) {
-        workerLib.emitLivelyEvent(listenerId + '/file_changed', {filepath: folderPath + files[i]});       
+        workerLib.emitLivelyEvent('file_changed', {
+          listenerid: listenerId,
+          filepath: folderPath + files[i],
+          fileending: path.extname(files[i])
+        });       
       }
     }
   }
   
   for (var i in paths) {
-    var path = paths[i];
+    var currpath = paths[i];
     if(options.markChangedOnInit) {
       markFilesInFolderChanged(path);
     }
-    watch.createMonitor(path, {'ignoreDotFiles':true}, function (monitor) {
+    watch.createMonitor(currpath, {'ignoreDotFiles':true}, function (monitor) {
       monitor.on('created', function (f) {
         if(validFile(f)) {
-          workerLib.emitLivelyEvent(listenerId + '/' + 'file_created', {filepath: f});        
+          workerLib.emitLivelyEvent('file_created', {listenerid: listenerId, filepath: f, fileending: path.extname(f)});        
         }
       })
       monitor.on('removed', function (f) {
         if(validFile(f)) {
-          workerLib.emitLivelyEvent(listenerId + '/' + 'file_removed', {filepath: f});  
+          workerLib.emitLivelyEvent('file_removed', {listenerid: listenerId, filepath: f, fileending: path.extname(f)});  
         }
       })
       monitor.on('content_changed', function (f) {
         if(validFile(f)) {
-          workerLib.emitLivelyEvent(listenerId + '/' + 'file_changed', {filepath: f}); 
+          workerLib.emitLivelyEvent('file_changed', {listenerid: listenerId, filepath: f, fileending: path.extname(f)}); 
         } 
       })
       if(!runningListeners[listenerId]) runningListeners[listenerId] = [];

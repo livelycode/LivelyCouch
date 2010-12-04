@@ -451,14 +451,17 @@ var executeExternalWorker = function(workerName, eventArguments) {
       workerLib.emitLivelyEvent(workerError + '/' + workerName, {workername: workerName});
     } else {
       var scriptName = doc.delegate;
-      var arguments = doc.parameters;
-      if(!arguments) arguments = {};
-      arguments.source_path = workerPath + workerName + '/';
-      arguments.event = eventArguments;
+      var arguments = {
+        event: eventArguments
+      };
       
       if(runningWorkers[workerName]) {
         var worker = runningWorkers[workerName].worker;
       } else {
+        arguments.worker = {
+          parameters: doc.parameters,
+          source_path: workerPath + workerName + '/',
+        };
         var worker = spawn('node', [workerPath + workerName + '/' + scriptName], {cwd: workerPath});
         runningWorkers[workerName] = {worker: worker};
         workerLib.emitLivelyEvent(workerStart + '/' + workerName, {docid: doc._id, workername: workerName});

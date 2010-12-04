@@ -1,10 +1,16 @@
 {
    "trigger": [
      {
-       "path": "/filesystem_changelistener/event_source_changes/file_changed",
+       "path": "/filesystem_changelistener/file_changed",
+       "parameters": {
+         "listenerid": "event_source_changes"
+       },
        "method": "GET"
      }, {
-       "path": "/filesystem_changelistener/event_source_changes/file_created",
+       "path": "/filesystem_changelistener/file_created",
+       "parameters": {
+         "listenerid": "event_source_changes"
+       },
        "method": "GET"
      }
    ],

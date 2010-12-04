@@ -28,7 +28,7 @@ var execute = function(data) {
     stopTimer(timerID);
   } else {
     var interval = data.event.parameters.interval;
-    var emittingEvents = JSON.parse(parameters.event.parameters.emittingevents);
+    var emittingEvents = data.event.parameters.emittingevents;
     startTimer(timerID, interval, emittingEvents);  
   }
 }

@@ -11,7 +11,7 @@
        "parameters": {
            "paths": ":paths",
            "listenerid": "event_source_changes",
-           "fileendings": ["json"],
+           "fileendings": [".json"],
            "mark_changed_on_start": false
        }
    }]

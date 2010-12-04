@@ -1,0 +1,8 @@
+{
+  "delegate":"email.js",
+  "parameters": {
+    "username": "your_username",
+    "password": "your_password",
+    "smtphost": "your_smtp_host"
+  }
+}

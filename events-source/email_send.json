@@ -1,0 +1,16 @@
+{
+   "type": "HTTP",
+   "trigger": [{
+     "path": "/email/send",
+     "method": "GET"
+   }],
+   "workers": [{
+     "name": "email",
+     "parameters": {
+       "from": "mail@livelycouch.org",
+       "to": "mirko.kiefer@arcor.de",
+       "subject": "LivelyCouch",
+       "body": "Regards from LivelyCouch!"
+     }
+   }]
+}
