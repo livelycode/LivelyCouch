@@ -10,6 +10,7 @@ var workerLib = require('./lib/workerlib');
 var resolveEventBindings = require('./lib/pattern_matching/resolve_bindings');
 
 var couchDb = workerLib.couchdb;
+var myutils = require('./lib/myutils');
 var mustache = require('./lib/mustache');
 var watch = require('./lib/watch');
 
@@ -104,12 +105,16 @@ var handleHTTPEvent = function(eventName, eventArguments, response) {
   var triggeredWorkers = [];
   var event = {path: eventName, parameters: eventArguments.query, method: eventArguments.requestMethod};
   if(eventArguments.postData) event.postData = eventArguments.postData;
-  var workers = resolveEventBindings.resolve(event, eventDefinitions);
-  workers.forEach(function(each) {
-    executeWorker(each.worker, {requestMethod: eventArguments.requestMethod, path: eventName, parameters: each.parameters});
-    triggeredWorkers.push({workerName: each.worker, eventArguments: each.parameters});
+  resolveEventBindings.resolve(event, eventDefinitions, function(workers) {
+    workers.forEach(function(each) {
+      executeWorker(each.worker, {
+        requestMethod: eventArguments.requestMethod,
+        path: eventName,
+        parameters: each.parameters});
+      triggeredWorkers.push({workerName: each.worker, eventArguments: each.parameters});
+    });
+    logEvent({eventMessage: eventName, eventArguments: eventArguments, triggeredWorkers: triggeredWorkers});  
   });
-  logEvent({eventMessage: eventName, eventArguments: eventArguments, triggeredWorkers: triggeredWorkers});
 }
 
 var logEvent = function(log) {
@@ -255,7 +260,7 @@ var writeAllWorkersToCouch = function(cb) {
       })
     });
   }
-  writeWorkerPaths(copyArray(workerSourcePaths), cb);
+  writeWorkerPaths(myutils.copyArray(workerSourcePaths), cb);
 }
 
 var writeAllEventsToCouch = function(cb) {
@@ -286,7 +291,7 @@ var writeAllEventsToCouch = function(cb) {
       });
     });
   }
-  writeEventPaths(copyArray(eventSourcePaths), cb);
+  writeEventPaths(myutils.copyArray(eventSourcePaths), cb);
 }
 
 var writeWorkerToCouch = function(workerSourcePath, folderName, cb) {
@@ -542,7 +547,7 @@ var startup = function() {
           db.create(function() {
             if(designDocFile) {
               var designDoc = require(designDocFile).ddoc;
-              stringifyFunctions(designDoc);
+              myutils.stringifyFunctions(designDoc);
               db.saveDoc(designDocName, designDoc, function(err, res) {
                 cb();
               });            
@@ -554,7 +559,7 @@ var startup = function() {
       });    
     };
     
-    doParallel([
+    myutils.doParallel([
       function(cb) {checkDatabase(livelyEventsDb, './designdocs/lively_events', '_design/lively_events', cb)},
       function(cb) {checkDatabase(livelyWorkersDb, null, null, cb)},
       function(cb) {checkDatabase(livelyHandlersDb, './designdocs/lively_handlers', '_design/lively_handlers', cb)},
@@ -570,7 +575,7 @@ var startup = function() {
     logEvents = JSON.parse(response.log_to_couch);
     openStdin();
     checkDirectories();
-    doLinear([
+    myutils.doLinear([
         function(cb) {checkDatabases(cb)},
         function(cb) {writeAllEventsToCouch(cb)},
         function(cb) {writeAllWorkersToCouch(cb)},
@@ -582,51 +587,5 @@ var startup = function() {
     );
   });
 }
-
-function object(o) {
-    function F() {}
-    F.prototype = o;
-    return new F();
-}
-function copyArray(a) {
-  return a.map(function(value) {return value});
-}
-
-function doParallel(functions, cb) {
-  var count = functions.length;
-  functions.forEach(function(each) {
-    each(function() {
-      count--;
-      if(count == 0) cb();
-    })
-  })
-}
-
-function doLinear(functions, cb) {
-  functions.reverse();
-  if(functions.length > 0) {
-    var currentFunction = functions.pop();
-    currentFunction(function() {
-        doLinear(functions, cb);
-    });
-  }
-  else {
-    cb();
-  }
-}
-
-function stringifyFunctions(x) {
-  for (i in x) {
-    if (i[0] != '_') {
-      if (typeof x[i] == 'function') {
-        x[i] = x[i].toString()
-      }
-      if (typeof x[i] == 'object') {
-        stringifyFunctions(x[i])
-      }
-    }
-  }
-}
-
 
 startup();
