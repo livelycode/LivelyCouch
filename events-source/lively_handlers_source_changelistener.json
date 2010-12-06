@@ -6,7 +6,7 @@
        "name": "filesystem_changelistener",
        "parameters": {
            "listenerid": "handler_source_changes",
-           "mark_changed_on_start": false
+           "mark_changed_on_start": true
        }
    }]
 }

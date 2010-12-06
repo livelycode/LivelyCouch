@@ -58,12 +58,13 @@ var startChangeListener = function(listenerId, paths, options) {
   var markFilesInFolderChanged = function(folderPath) {
     var files = fs.readdirSync(folderPath);
     for (var i in files) {
+      fs.readdir(folderPath + files[i], function(err, files1) {
+        if(files1) {
+          markFilesInFolderChanged(folderPath + files[i] + '/');
+        }
+      })
       if (validFile(files[i])) {
-        workerLib.emitLivelyEvent('file_changed', {
-          listenerid: listenerId,
-          filepath: folderPath + files[i],
-          fileending: path.extname(files[i])
-        });       
+        emitEvent('file_changed', folderPath + files[i], listenerId);
       }
     }
   }
@@ -71,22 +72,22 @@ var startChangeListener = function(listenerId, paths, options) {
   for (var i in paths) {
     var currpath = paths[i];
     if(options.markChangedOnInit) {
-      markFilesInFolderChanged(path);
+      markFilesInFolderChanged(currpath);
     }
     watch.createMonitor(currpath, {'ignoreDotFiles':true}, function (monitor) {
       monitor.on('created', function (f) {
         if(validFile(f)) {
-          workerLib.emitLivelyEvent('file_created', {listenerid: listenerId, filepath: f, fileending: path.extname(f)});        
+          emitEvent('file_created', f, listenerId); 
         }
       })
       monitor.on('removed', function (f) {
         if(validFile(f)) {
-          workerLib.emitLivelyEvent('file_removed', {listenerid: listenerId, filepath: f, fileending: path.extname(f)});  
+          emitEvent('file_removed', f, listenerId); 
         }
       })
       monitor.on('content_changed', function (f) {
         if(validFile(f)) {
-          workerLib.emitLivelyEvent('file_changed', {listenerid: listenerId, filepath: f, fileending: path.extname(f)}); 
+          emitEvent('file_changed', f, listenerId); 
         } 
       })
       if(!runningListeners[listenerId]) runningListeners[listenerId] = [];
@@ -96,6 +97,16 @@ var startChangeListener = function(listenerId, paths, options) {
   }
 }
 
+
+var emitEvent = function(event, filePath, listenerId) {
+  workerLib.emitLivelyEvent(event, {
+    listenerid: listenerId,
+    filepath: filePath,
+    fileending: path.extname(filePath),
+    filename: path.basename(filePath, path.extname(filePath)),
+    foldername: path.dirname(filePath).split('/').pop()
+  }); 
+}
 
 
 var stopChangeListener = function(id) {

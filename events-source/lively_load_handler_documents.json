@@ -4,20 +4,23 @@
        "path": "/filesystem_changelistener/file_changed",
        "parameters": {
          "listenerid": "handler_source_changes",
-         "fileending": ".json"
+         "fileending": ".json",
+         "foldername": ":foldername"
        }
      }, {
        "path": "/filesystem_changelistener/file_created",
        "parameters": {
          "listenerid": "handler_source_changes",
-         "fileending": ".json"
+         "fileending": ".json",
+         "foldername": ":foldername"
        }
      }
    ],
    "workers": [{
        "name": "load_document",
        "parameters": {
-           "db": "lively_handlers"
+           "db": "lively_handlers",
+           "docid": ":foldername"
        }
    }]
 }

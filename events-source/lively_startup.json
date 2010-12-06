@@ -1,4 +1,4 @@
-{
+ {
    "type": "HTTP",
    "trigger": [{
      "path": "/lively_events/lively_events_started",
@@ -8,10 +8,7 @@
        "name": "changelistener",
        "parameters": {
            "listenerid": "handler_listener",
-           "db": "lively_handlers",
-           "events": ["handler_changed"],
-           "login": "lively",
-           "password": "lively"
+           "db": "lively_handlers"
        }
    },{
        "name": "config_emitter"

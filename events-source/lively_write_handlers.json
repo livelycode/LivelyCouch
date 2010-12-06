@@ -1,8 +1,10 @@
 {
    "trigger": [{
-     "path": "/changelistener/handler_changed",
+     "path": "/changelistener/document_changed",
      "method": "GET",
-     "parameters": {}
+     "parameters": {
+       "listenerid": "handler_listener"
+     }
    }],
    "workers": [{
      "name": "write_handler",

@@ -1,9 +1,0 @@
-{
-   "trigger": [{
-     "path": "/changelistener/start",
-     "method": "GET"
-   }],
-   "workers": [{
-     "name": "changelistener"
-   }]
-}

@@ -29,7 +29,7 @@ var execute = function(data) {
   if(event == 'changelistener/stop') {
     stopChangeListener(id);
   } else {
-    var events = data.event.parameters.events;
+//    var events = data.event.parameters.events;
     var dbName = data.event.parameters.db;
     var filter = data.event.parameters.filter;
     var login = data.event.parameters.login;
@@ -39,17 +39,15 @@ var execute = function(data) {
     } else {
       client = workerLib.client;
     }
-    startChangeListener(id, dbName, filter, events);  
+    startChangeListener(id, dbName, filter);  
   }
 }
 
-var startChangeListener = function(id, dbName, filter, events) {
+var startChangeListener = function(id, dbName, filter) {
   stopChangeListener(id);
   var changeListener = createChangeListener(dbName);
   changeListener.on('data', function(data) {
-    for (var i in events) {
-      workerLib.emitLivelyEvent(events[i], {docid: data.id, db: dbName, listenerid: id});  
-    }
+    workerLib.emitLivelyEvent('document_changed', {docid: data.id, db: dbName, listenerid: id});  
   });
   runningListeners[id] = changeListener;
   workerLib.emitLivelyEvent("started", {listenerid: id});
