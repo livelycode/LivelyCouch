@@ -7,10 +7,12 @@
    "workers": [{
      "name": "email",
      "parameters": {
+       "docid": ":docid",
        "from": "mail@livelycouch.org",
        "to": "mirko.kiefer@arcor.de",
        "subject": "LivelyCouch",
        "body": "Regards from LivelyCouch!"
-     }
+     },
+     "forward": ["from", "to"]
    }]
 }

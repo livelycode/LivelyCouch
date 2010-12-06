@@ -34,8 +34,11 @@ var execute = function(data) {
     var filter = data.event.parameters.filter;
     var login = data.event.parameters.login;
     var password = data.event.parameters.password;
-    
-    client = couchdb.createClient(5984, '127.0.0.1', login, password);
+    if(login & password) {
+      client = couchdb.createClient(5984, '127.0.0.1', login, password);    
+    } else {
+      client = workerLib.client;
+    }
     startChangeListener(id, dbName, filter, events);  
   }
 }
