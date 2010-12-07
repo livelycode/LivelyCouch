@@ -1,9 +1,9 @@
 
 LivelyCouch is all about HTTP-Events
 
-Lets say we have an inbox database in CouchDB that is fed with a document every time the user receives a message.
-If a new message arrives in the database we want to notify the user via an e-mail.
-So we basically need two parts to things to accomplish that - a database changes listener that informs us on new messages and some code to send an e-mail.
+
+Imagine you have an application that allows the user to receive messages. These messages are stored in an "inbox" database in CouchDB. Every time the user receives a message we want to notify him with an email.
+So we basically need two things for this scenario - a database changes listener that informs us on new messages and some code to send an e-mail.
 LivelyCouch gives you both in the form of Workers. There is a changelistener Worker that can be configured to listen to CouchDB's _changes feed and emits event when something happens.
 In addition we have an e-mail Worker for you that can be triggered by certain events.
 
@@ -55,6 +55,13 @@ events-source/message_arrived.json
 This subscription binds on any Event of "/changelistener/document_changed" but only if its "listenerid" parameter matches "inbox_listener".
 We then simply pass all necessary parameters to the email Worker, just as we did with the changelistener before.
 Thats all you have to do! Isn't it awesome - we didn't have to write a single line of code to get this working. Its just wiring of the two Workers with the right event subscriptions.
-Every time you edit your subscription code on disk, LivelyCouch automatically pulls the changes into the "events" database from where it actually gets all subscriptions on runtime.
+Every time you edit your subscription code on disk, LivelyCouch automatically pulls the changes as JSON documents into the "events" database from where it actually gets all subscriptions on runtime.
 So when you replicate the events database to a second Couch that has LivelyCouch installed it will have the same functionality.
+
+LivelyCouch has a few more Workers ready to use for common tasks in Couch applications e.g.
+- a Timer that periodically emits events
+- a filesystem watcher
+- a Worker to load files as attachments to CouchDB
+- a replication Worker that allows you to define CouchDB replication tasks
+
 In the next tutorial we will explain how to write your own simple Workers to be able to build more complex solutions.
