@@ -70,14 +70,26 @@ var launchEventSystem = function() {
   http.createServer(function (request, response) {
     var urlObject = url.parse(request.url, true);
     var pathName = urlObject.pathname;
-    var eventArguments = {requestMethod: request.method, event: pathName};
+    var eventArguments = {requestMethod: request.method, event: pathName, query: {}};
     if (request.method == 'POST') {
       var postData = '';
+      request.setEncoding('utf8');
       request.on('data', function(data) {
-        postData += data;
+        postData = postData + data;
       });
       request.on('end', function() {
-        eventArguments.postData = postData;
+        try {
+          var postDataParsed = JSON.parse(postData);
+          for(var key in postDataParsed) {
+            try {
+              eventArguments.query[key] = JSON.parse(postDataParsed[key]);
+            } catch(err1) {
+              eventArguments.query[key] = postDataParsed[key];            
+            }
+          }
+        } catch(error) {
+          eventArguments.query.data = postData;
+        }
         handleHTTPEvent(pathName, eventArguments, response);
       });
     } else {
@@ -91,7 +103,6 @@ var launchEventSystem = function() {
           }
         }
       }
-      if(!eventArguments.query) eventArguments.query = {};
       handleHTTPEvent(pathName, eventArguments, response);
     }
   }).listen(8125);

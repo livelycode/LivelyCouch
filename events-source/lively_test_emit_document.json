@@ -1,0 +1,14 @@
+{
+  "trigger": [{
+    "path": "/emit_document/:db/:docid",
+    "parameters": {}
+  }],
+  "workers": [{
+    "name": "emit_document",
+    "parameters": {
+      "db": ":db",
+      "docid": ":docid",
+      "event": "test"
+    }
+   }]
+}
