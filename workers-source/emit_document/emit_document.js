@@ -23,7 +23,6 @@ var emitDocument = function(dbName, docId, event) {
   db.getDoc(docId, function (error, doc) {
     if(doc) {
       workerLib.emitLivelyEvent(event, doc);
-      console.log(doc);
     }
   })
 }

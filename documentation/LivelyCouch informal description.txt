@@ -1,0 +1,50 @@
+
+Worker
+- one OS process for each - asynchronuous
+- currently all in Node.js
+- simply listen on stdin --> other languages possible
+- get messages via stdin in JSON
+- reading of messages simplified through workerLib (Node.js - less than 100 lines)
+- Worker can communicate with Couch through node-couchdb library
+- Worker can emit Events
+
+
+Events
+- HTTP messages
+- sent to CouchDB on /_events/...
+- each Event has namespace depending on Worker
+
+sample:
+127.0.0.1:5984/_events/worker_name/event_name
+POST data:
+{
+  "sample_param": "value"
+}
+
+- CouchDB forwards them to lively-events.js -- Lively Core
+
+
+Event Subscriptions:
+- maps Events and their parameters to Workers and their parameters
+
+Lively Core:
+- is managed by CouchDB (started/stopped)
+- receives all local Events
+- maps Events to Workers
+- mapping happens through Event Subscriptions
+- sends Events to Workers through stdin
+- manages starting and stopping of Workers
+- spawns all Workers as subprocesses
+
+- bootstraps LivelyCouch on startup (writing Event Subscriptions, Workers, Handlers to CouchDB)
+
+Handler:
+- code that is triggered through an HTTP message
+- can decide what to return to client - synchronuous
+- include mustache.js templating library
+- must be written in Node.js
+
+Handler Definitions:
+- are documents in CouchDB
+- define an entire application
+- define which URL paths trigger which Handlers

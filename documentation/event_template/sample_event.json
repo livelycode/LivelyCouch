@@ -1,0 +1,22 @@
+{
+  "trigger": [{
+      "path": "/some_event_path",
+      "parameters": {
+        "some_expected_param": "some_value",
+        "another_param": ":some_binding"
+      }
+    }, {
+       "path": "/another_event_path",
+       "parameters": {}
+  }],
+  "workers": [{
+      "name": "worker_name",
+      "parameters": {
+        "some_fixed_param": "some_fixed_value",
+         "some_dynamic_param": ":some_binding"
+      }
+    }, {
+      "name": "another_worker",
+      "parameters": {}
+  }]
+}

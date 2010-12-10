@@ -69,6 +69,7 @@ var stats = {};
 var launchEventSystem = function() {
   http.createServer(function (request, response) {
     var urlObject = url.parse(request.url, true);
+    console.log(request.headers);
     var pathName = urlObject.pathname;
     var eventArguments = {requestMethod: request.method, event: pathName, query: {}};
     if (request.method == 'POST') {
