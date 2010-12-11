@@ -157,7 +157,7 @@ var createLivelyEventsChangeListener = function(cb) {
 }
 
 var updateEventDefinitions = function(cb) {
-  livelyEventsDb.view('lively_events', 'triggering-urls-new', {}, function(err, resp) {
+  livelyEventsDb.view('lively_events', 'triggering-urls', {}, function(err, resp) {
     var rows = resp.rows;
     eventDefinitions = resp.rows.map(function(each) {return each.value});
     workerLib.emitLivelyEvent(eventDefinitionsUpdated, {});
