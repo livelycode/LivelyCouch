@@ -5,8 +5,6 @@ var myutils = require('./lib/myutils');
 
 //these values are being initialized in startup()
 
-var client = workerLib.client;
-
 workerLib.setEventNamespace('lively_events');
 
 // configurable event emits
