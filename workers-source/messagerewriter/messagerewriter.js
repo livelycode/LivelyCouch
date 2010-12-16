@@ -1,4 +1,4 @@
-
+// This worker is still under development!! 
 var http = require('http');
 var url = require('url');
 var sys = require('sys');
@@ -7,32 +7,27 @@ var workerLib = require('../../lib/workerlib');
 var couchdb = workerLib.couchdb;
 
 var name = 'messagerewriter';
-//var messages = {stop: };
-workerLib.eventNamespace = name;
-//workerLib.messages = messages;
-
-var client;
-
 var runningListeners = {};
 
-var dataStream = workerLib.createDataListener();
-
-dataStream.on('data', function(d) {
-  execute(d);
+workerLib.initialize(name, function() {
+  var eventStream = workerLib.openEventStream();
+  eventStream.on('event', function(event) {
+    execute(event);
+  });
+  
+  eventStream.on('end', function() {
+    process.exit(0);
+  });
 });
 
-dataStream.on('end', function() {
-  process.exit(0);
-});
-
-var execute = function(data) {
-  var event = data.event.path;
-  var id = data.event.parameters.rewriteid;
+var execute = function(event) {
+  var event = event.path;
+  var id = event.parameters.rewriteid;
   if (event == 'rewrite/stop') {
     stopRewriteListener(id);
   } else {
-    var rewrites = data.event.parameters.rewrites;
-    var filter = data.event.parameters.filter;
+    var rewrites = event.parameters.rewrites;
+    var filter = event.parameters.filter;
 
     client = couchdb.createClient(5984, '127.0.0.1', login, password);
     startRewriteListener(id, dbName, filter, events);  
@@ -42,7 +37,7 @@ var execute = function(data) {
 var startRewriteListener = function(id, dbName, filter, events) {
   stopChangeListener(id);
   var changeListener = createChangeListener(dbName);
-  changeListener.on('data', function(data) {
+  changeListener.on('data', function(event) {
     for (var i in events) {
       workerLib.emitLivelyEvent(events[i], {docid: data.id, db: dbName, listenerid: id});  
     }

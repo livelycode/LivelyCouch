@@ -7,24 +7,24 @@ var workerLib = require('../../lib/workerlib');
 
 var couchdb = workerLib.couchdb;
 
-var name = 'loadfiles';
-workerLib.setEventNamespace(name);
-
-var dataStream = workerLib.createDataListener();
-
-dataStream.on('data', function(d) {
-  execute(d);
+workerLib.initialize('loadfiles', function() {
+  var eventStream = workerLib.openEventStream();
+  eventStream.on('event', function(event) {
+    execute(event);
+  });
+  
+  eventStream.on('end', function() {
+    process.exit(0);
+  });
 });
 
-dataStream.on('end', function() {
-  process.exit(0);
-});
 
-var execute = function(data) {
-  var folderPath = data.event.parameters.folderpath;
-  var filePath = data.event.parameters.filepath;
-  var docId = data.event.parameters.docid;
-  var dbName = data.event.parameters.db;
+
+var execute = function(event) {
+  var folderPath = event.parameters.folderpath;
+  var filePath = event.parameters.filepath;
+  var docId = event.parameters.docid;
+  var dbName = event.parameters.db;
   var client = workerLib.client;
   var db = client.db(dbName);
   db.getDoc(docId, function(er, doc) {

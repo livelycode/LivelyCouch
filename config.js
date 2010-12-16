@@ -1,5 +1,7 @@
-var workerLib = require('./lib/workerlib');
-var client = workerLib.client;
+var couchdb = require('./lib-external/couchdb');
+var client = couchdb.createClient(5984, '127.0.0.1', 'lively', 'lively');
+exports.couchdb = couchdb;
+exports.client = client;
 
 exports.livelyEventsDbName = 'lively_events';
 exports.livelyWorkersDbName = 'lively_workers';

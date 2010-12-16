@@ -9,7 +9,8 @@
        "parameters": {
            "listenerid": "handler_listener",
            "db": "lively_handlers"
-       }
+       },
+       "forward": ["listenerid"]
    },{
        "name": "config_emitter"
    }]

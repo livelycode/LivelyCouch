@@ -7,20 +7,24 @@ var workerLib = require('../../lib/workerlib');
 var couchdb = workerLib.couchdb;
 
 var name = 'writefiles';
-workerLib.setEventNamespace(name);
-
-var dataStream = workerLib.createDataListener();
-
-dataStream.on('data', function(d) {
-  execute(d);
+workerLib.initialize(name, function() {
+  var eventStream = workerLib.openEventStream();
+  
+  eventStream.on('event', function(event) {
+    execute(event);
+  });
+  
+  eventStream.on('end', function() {
+    process.exit(0);
+  });
 });
 
-var execute = function(data) {
-  var folderPath = data.event.parameters.path;
-  var docId = data.event.parameters.docid;
-  var dbName = data.event.parameters.db;
-  var login = data.event.parameters.login;
-  var password = data.event.parameters.password;
+var execute = function(event) {
+  var folderPath = event.parameters.path;
+  var docId = event.parameters.docid;
+  var dbName = event.parameters.db;
+  var login = event.parameters.login;
+  var password = event.parameters.password;
   var client = couchdb.createClient(5984, '127.0.0.1', login, password);
   writeOutAttachments(client,dbName, docId, folderPath, function() {
     workerLib.emitLivelyEvent('attachments_written', {docid:docId, dbname:dbName, folderpath:folderPath})

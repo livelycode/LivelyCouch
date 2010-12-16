@@ -14,7 +14,8 @@
       "parameters": {
         "some_fixed_param": "some_fixed_value",
          "some_dynamic_param": ":some_binding"
-      }
+      },
+      "forward": ["some_dynamic_param"]
     }, {
       "name": "another_worker",
       "parameters": {}

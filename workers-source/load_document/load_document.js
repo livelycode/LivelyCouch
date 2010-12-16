@@ -6,26 +6,24 @@ var workerLib = require('../../lib/workerlib');
 var couchdb = workerLib.couchdb;
 var path = require('path');
 
-var name = 'load_document';
-workerLib.setEventNamespace(name);
-
-var dataStream = workerLib.createDataListener();
-
-dataStream.on('data', function(d) {
-  execute(d);
+workerLib.initialize('load_document', function() {
+  var eventStream = workerLib.openEventStream();
+  eventStream.on('event', function(event) {
+    execute(event);
+  });
+  
+  eventStream.on('end', function() {
+    process.exit(0);
+  });
 });
 
-dataStream.on('end', function() {
-  process.exit(0);
-});
-
-var execute = function(data) {
-  var filePath = data.event.parameters.filepath;
-  var docId = data.event.parameters.docid;
+var execute = function(event) {
+  var filePath = event.parameters.filepath;
+  var docId = event.parameters.docid;
   if(!docId) {
     docId = path.basename(filePath, path.extname(filePath));
   }
-  var dbName = data.event.parameters.db;
+  var dbName = event.parameters.db;
   var db = workerLib.client.db(dbName);
   writeDocToCouch(filePath, db, docId, function() {
     workerLib.emitLivelyEvent('document_loaded', {filepath: filePath, docid: docId, db: dbName});

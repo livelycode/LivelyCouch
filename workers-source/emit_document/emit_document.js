@@ -3,18 +3,18 @@ var workerLib = require('../../lib/workerlib');
 var couchdb = workerLib.couchdb;
 
 var name = 'emit_document';
-workerLib.setEventNamespace(name);
-
-var dataStream = workerLib.createDataListener();
-
-dataStream.on('data', function(d) {
-  execute(d);
+workerLib.initialize(name, function() {
+  var eventStream = workerLib.openEventStream();
+  
+  eventStream.on('event', function(event) {
+    execute(event);
+  });
 });
 
-var execute = function(data) {
-  var docId = data.event.parameters.docid;
-  var dbName = data.event.parameters.db;
-  var event = data.event.parameters.event;
+var execute = function(event) {
+  var docId = event.parameters.docid;
+  var dbName = event.parameters.db;
+  var event = event.parameters.event;
   emitDocument(dbName, docId, event);
 }
 

@@ -9,20 +9,20 @@ var watch = require('../../lib/watch');
 var couchdb = workerLib.couchdb;
 
 var name = 'handler_source_changelistener';
-workerLib.setEventNamespace(name);
 
-var dataStream = workerLib.createDataListener();
-
-dataStream.on('data', function(d) {
-  execute(d);
+workerLib.initialize(name, function() {
+  var eventStream = workerLib.openEventStream();
+  eventStream.on('event', function(event) {
+    execute(event);
+  });
+  
+  eventStream.on('end', function() {
+    process.exit(0);
+  });
 });
 
-dataStream.on('end', function() {
-  process.exit(0);
-});
-
-var execute = function(data) {
-  handlerSourcePaths = data.event.parameters.paths;
+var execute = function(event) {
+  handlerSourcePaths = event.parameters.paths;
   for(var i in handlerSourcePaths) {
     startChangeListener(handlerSourcePaths[i]);    
   }

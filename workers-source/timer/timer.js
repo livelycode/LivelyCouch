@@ -8,27 +8,25 @@ var couchdb = workerLib.couchdb;
 
 var runningTimers = {};
 
-var name = 'timer';
-workerLib.setEventNamespace(name);
-
-var stdin = process.openStdin();
-
-stdin.on('data', function(d) {
-  execute(JSON.parse(d.toString()));
+workerLib.initialize('timer', function() {
+  var eventStream = workerLib.openEventStream();
+  eventStream.on('event', function(event) {
+    execute(event);
+  });
+  
+  eventStream.on('end', function() {
+    process.exit(0);
+  });
 });
 
-stdin.on('end', function () {
-
-});
-
-var execute = function(data) {
-  var timerID = data.event.parameters.timerid;
-  var event = data.event.path;
+var execute = function(event) {
+  var timerID = event.parameters.timerid;
+  var event = event.path;
   if (event == 'timer/stop') {
     stopTimer(timerID);
   } else {
-    var interval = data.event.parameters.interval;
-    var emittingEvents = data.event.parameters.emittingevents;
+    var interval = event.parameters.interval;
+    var emittingEvents = event.parameters.emittingevents;
     startTimer(timerID, interval, emittingEvents);  
   }
 }

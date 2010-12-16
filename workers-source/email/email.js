@@ -11,28 +11,28 @@ var userName;
 var password;
 var host;
 
-workerLib.setEventNamespace('email');
-
-var dataStream = workerLib.createDataListener();
-
-dataStream.on('data', function(d) {
-  execute(d);
+workerLib.initialize('email', function() {
+  var workerParameters = workerLib.workerParameters;
+  userName = workerParameters.username;
+  password = workerParameters.password;
+  host = workerParameters.smtphost;
+  
+  var eventStream = workerLib.openEventStream();
+  eventStream.on('event', function(event) {
+    execute(event);
+  });
+  
+  eventStream.on('end', function() {
+    process.exit(0);
+  });
 });
 
-dataStream.on('end', function() {
-  process.exit(0);
-});
-var execute = function(data) {
-  var id = data.event.parameters.rewriteid;
-  if(data.worker) {
-    userName = data.worker.parameters.username;
-    password = data.worker.parameters.password;
-    host = data.worker.parameters.smtphost;
-  }
-  var from = data.event.parameters.from;
-  var to = data.event.parameters.to;
-  var subject = data.event.parameters.subject;
-  var body = data.event.parameters.body;
+var execute = function(event) {
+  var id = event.parameters.rewriteid;
+  var from = event.parameters.from;
+  var to = event.parameters.to;
+  var subject = event.parameters.subject;
+  var body = event.parameters.body;
 
   var userNameBuffer = new Buffer(userName.length);
   userNameBuffer.write(userName, offset=0, encoding="utf8");

@@ -5,40 +5,40 @@ var sys = require('sys');
 var fs = require('fs');
 var path = require('path');
 var workerLib = require('../../lib/workerlib');
-var watch = require('../../lib/watch');
+var watch = require('../../lib-external/watch');
 
 var couchdb = workerLib.couchdb;
-
-var name = 'filesystem_changelistener';
-workerLib.setEventNamespace(name);
-
 var runningListeners = {};
 
-var dataStream = workerLib.createDataListener();
-
-dataStream.on('data', function(d) {
-  execute(d);
+var name = 'filesystem_changelistener';
+workerLib.initialize(name, function() {
+  var eventStream = workerLib.openEventStream();
+  eventStream.on('event', function(event) {
+    execute(event);
+  });
+  
+  eventStream.on('end', function() {
+    process.exit(0);
+  });
 });
 
-dataStream.on('end', function() {
-  process.exit(0);
-});
-
-var execute = function(data) {
-  var event = data.event.path;
-  var listenerId = data.event.parameters.listenerid;
-  if (event == 'filesystem_changelistener/stop') {
+var execute = function(event) {
+  console.log(event);
+  console.log('###' + event.parameters.listenerid);
+  var event = event.path;
+  var listenerId = event.parameters.listenerid;
+  /*if (event == 'filesystem_changelistener/stop') {
     stopChangeListener(id);
   } else {
-    if(data.event.parameters.path) var paths = [data.event.parameters.path];
-    if(data.event.parameters.paths) var paths = data.event.parameters.paths;
-    var fileEndings = data.event.parameters.fileendings;
-    var markChangedOnInit = data.event.parameters.mark_changed_on_start;
+    if(event.parameters.path) var paths = [event.parameters.path];
+    if(event.parameters.paths) var paths = event.parameters.paths;
+    var fileEndings = event.parameters.fileendings;
+    var markChangedOnInit = event.parameters.mark_changed_on_start;
     var options = {};
     if (fileEndings) options.fileEndings = fileEndings;
     if (markChangedOnInit) options.markChangedOnInit = markChangedOnInit;
     startChangeListener(listenerId, paths, options);  
-  }
+  }*/
 }
 
 var startChangeListener = function(listenerId, paths, options) {

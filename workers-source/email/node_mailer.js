@@ -73,7 +73,7 @@ var email = {
     });
   },
 
-  parseResponse:function(data){
+  parseResponse:function(event){
     var d = data.split("\r\n");
     d.forEach(function(itm){
       if(itm.indexOf("250 OK id=") != -1){
