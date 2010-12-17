@@ -23,9 +23,9 @@ workerLib.initialize(name, function() {
 });
 
 var execute = function(event) {
-  var event = event.path;
+  var eventPath = event.path;
   var id = event.parameters.listenerid;
-  if(event == 'changelistener/stop') {
+  if(eventPath == 'changelistener/stop') {
     stopChangeListener(id);
   } else {
 //    var events = event.parameters.events;
@@ -45,7 +45,7 @@ var execute = function(event) {
 var startChangeListener = function(id, dbName, filter) {
   stopChangeListener(id);
   var changeListener = createChangeListener(dbName);
-  changeListener.on('data', function(event) {
+  changeListener.on('data', function(data) {
     workerLib.emitLivelyEvent('document_changed', {docid: data.id, db: dbName, listenerid: id});  
   });
   runningListeners[id] = changeListener;

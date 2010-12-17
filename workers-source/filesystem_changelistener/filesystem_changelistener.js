@@ -23,11 +23,9 @@ workerLib.initialize(name, function() {
 });
 
 var execute = function(event) {
-  console.log(event);
-  console.log('###' + event.parameters.listenerid);
-  var event = event.path;
+  var eventPath = event.path;
   var listenerId = event.parameters.listenerid;
-  /*if (event == 'filesystem_changelistener/stop') {
+  if (eventPath == 'filesystem_changelistener/stop') {
     stopChangeListener(id);
   } else {
     if(event.parameters.path) var paths = [event.parameters.path];
@@ -38,7 +36,7 @@ var execute = function(event) {
     if (fileEndings) options.fileEndings = fileEndings;
     if (markChangedOnInit) options.markChangedOnInit = markChangedOnInit;
     startChangeListener(listenerId, paths, options);  
-  }*/
+  }
 }
 
 var startChangeListener = function(listenerId, paths, options) {
