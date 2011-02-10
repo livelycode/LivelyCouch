@@ -1,0 +1,18 @@
+{
+  "name": "livelycouch",
+  "description": "A framework for building server-side couchapps.",
+  "version": "0.0.1",
+  "homepage": "http://www.livelycouch.org",
+  "repository": "git://github.com/livelycouch/LivelyCouch.git",
+  "author": "Mirko Kiefer <mail@mirkokiefer.com> (http://www.mirkokiefer.com)",
+  "main": "lively-events",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "mustache": "*"
+  },
+  "engines": {
+    "node": "*"
+  }
+}

@@ -2,6 +2,8 @@ var workerLib = require('./lib/workerlib');
 var deployment = require('./lib/deployment');
 var subscriptionHandling = require('./lib/subscription_handling');
 var workerManagement = require('./lib/worker_management');
+var EventEmitter = require('events').EventEmitter;
+var statusEmitter = new EventEmitter();
 deployment.initialize({workerLib: workerLib});
 workerManagement.initialize({workerLib: workerLib});
 subscriptionHandling.initialize({workerLib: workerLib, deployment: deployment, workerManagement: workerManagement});
@@ -22,16 +24,21 @@ var openStdin = function() {
   });
 }
 
-var startup = function() {
+var startup = function(cb) {
   openStdin();
   myutils.doLinear([
     function(cb) {workerLib.initialize('lively_events', cb)},
     function(cb) {deployment.checkAndDeploy(cb)},
     function(cb) {subscriptionHandling.createLivelyEventsChangeListener(cb)},
-    function(cb) {subscriptionHandling.launchEventSystem(cb)}
+    function(cb) {subscriptionHandling.launchEventSystem(cb)},
+    function(cb) {deployment.createLivelyWorkerChangeListener(cb)}
   ], function() {
-    deployment.createLivelyWorkerChangeListener();
+    cb()
   });
 }
 
-startup();
+startup(function() {
+	statusEmitter.emit('started');
+});
+
+statusEmitter.on('started', function() {console.log("started!")});
