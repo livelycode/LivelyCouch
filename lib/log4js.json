@@ -1,0 +1,16 @@
+{
+  "appenders": [
+    { 
+      "category": "default", 
+      "type": "file", 
+      "filename": "lively.log", 
+      "layout": { 
+        "type": "messagePassThrough" 
+      }
+    }
+  ],
+  
+  "levels": {
+    "tests":  "WARN"
+  }
+}
