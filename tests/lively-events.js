@@ -1,15 +1,19 @@
 var vows = require('vows'),
-    assert = require('assert');
-    
-var livelyEvents = require('../lively-events');
+assert = require('assert');
 
+var livelyEvents = require('../lively-events');
+console.log(livelyEvents);
 vows.describe('lively-events').addBatch({
-	'startup:' : {
-		topic: function() {
-			return 5
-		},
-		'is 5': function(topic) {
-			assert.equal(topic, 5);
-		}
-	}
+  'startup:' : {
+    topic: function() {
+      var that = this;
+      livelyEvents.statusEmitter.on('started', function() {
+        that.callback(null, true)
+      });
+    },
+    'has started': function(topic) {
+      assert.
+      true(topic);
+    }
+  }
 }).export(module);

@@ -41,4 +41,4 @@ startup(function() {
 	statusEmitter.emit('started');
 });
 
-statusEmitter.on('started', function() {console.log("started!")});
+exports.statusEmitter = statusEmitter;
