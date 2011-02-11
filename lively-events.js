@@ -24,16 +24,16 @@ var openStdin = function() {
   });
 }
 
-var startup = function(cb) {
+var startup = function(startupCb) {
   openStdin();
   myutils.doLinear([
     function(cb) {workerLib.initialize('lively_events', cb)},
     function(cb) {deployment.checkAndDeploy(cb)},
     function(cb) {subscriptionHandling.createLivelyEventsChangeListener(cb)},
     function(cb) {subscriptionHandling.launchEventSystem(cb)},
-    function(cb) {deployment.createLivelyWorkerChangeListener(cb)}
+    function(cb) {deployment.createLivelyWorkerChangeListener(); cb();}
   ], function() {
-    cb()
+    startupCb();
   });
 }
 
