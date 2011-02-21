@@ -2,7 +2,6 @@
   "trigger": [{
     "path": "/emit_document/:db/:docid",
     "parameters": {
-      "bla": "test"
     }
   }],
   "workers": [{
