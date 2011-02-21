@@ -13,6 +13,9 @@
     "mustache": "*",
     "log4js": "0.2.3"
   },
+  "devDependencies": {
+    "vows": "*"
+  }
   "engines": {
     "node": "*"
   }
