@@ -18,8 +18,13 @@ var saveSettings = function(settings, cb) {
       data: JSON.stringify(setting[2]),
       responseEncoding: 'binary'
     }, function(err, res) {
+      resObj = JSON.parse(res);
       if(err) {
-        console.log(err);
+      	console.log("cannot connect to CouchDB!");
+      	return;
+      }
+      if(resObj.error) {
+        console.log(resObj);
       } else {
         if(settings.length > 0) {
           saveSettings(settings, cb);
