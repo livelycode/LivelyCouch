@@ -1,10 +1,9 @@
 var workerLib = require('./lib/workerlib');
-var deployment = require('./lib/deployment');
+var deployment = require('./lib/deployment').init({workerLib: workerLib});
 var subscriptionHandling = require('./lib/subscription_handling');
 var workerManagement = require('./lib/worker_management');
 var EventEmitter = require('events').EventEmitter;
 var statusEmitter = new EventEmitter();
-deployment.initialize({workerLib: workerLib});
 workerManagement.initialize({workerLib: workerLib});
 subscriptionHandling.initialize({workerLib: workerLib, deployment: deployment, workerManagement: workerManagement});
 
