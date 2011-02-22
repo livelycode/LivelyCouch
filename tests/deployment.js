@@ -3,8 +3,7 @@ assert = require('assert');
 var workerLib = require('../lib/workerlib');
 workerLib.initialize('lively_events');
 var client = workerLib.client;
-var deployment = require('../lib/deployment');
-deployment.initialize({workerLib: workerLib});
+var deployment = require('../lib/deployment').init({workerLib: workerLib});
 var myutils = require('../lib/myutils');
 var config = require('../config');
 
