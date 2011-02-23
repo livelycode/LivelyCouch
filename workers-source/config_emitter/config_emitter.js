@@ -25,6 +25,6 @@ var execute = function(event) {
   ], function(each, cb) {
     workerLib.emitLivelyEvent(each.setting, {paths: each.paths}, cb);
   }, function() {
-    //process.exit(0);
+    process.exit(0);
   });
 }
