@@ -1,11 +1,14 @@
 var couchdb = require('./lib-external/couchdb');
 exports.couchdbPort = 5984;
 exports.couchdbHost = '127.0.0.1';
-var client = couchdb.createClient(exports.couchdbPort, exports.couchdbHost, 'lively', 'lively');
+exports.couchdbUser = 'lively';
+exports.couchdbPassword = 'lively';
+var client = couchdb.createClient(exports.couchdbPort, exports.couchdbHost, exports.couchdbUser, exports.couchdbPassword);
 
 exports.couchdb = couchdb;
 exports.client = client;
 
+exports.rootPath = __dirname;
 exports.eventsSource = [__dirname + '/event-subscribers/'];
 exports.workersSource = [__dirname + '/workers-source/'];
 exports.workersDeployed = __dirname + '/workers-deployed/';
