@@ -17,7 +17,7 @@
    "workers": [{
      "name": "load_document",
      "parameters": {
-        "db": "lively_events"
+        "db": "lively_subscribers"
       }
    }]
 }

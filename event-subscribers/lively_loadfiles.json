@@ -1,9 +1,0 @@
-{
-   "trigger": [{
-       "path": "/loadfiles",
-       "method": "GET"
-   }],
-   "workers": [{
-       "name": "loadfiles"
-   }]
-}

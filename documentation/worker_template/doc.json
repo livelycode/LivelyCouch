@@ -2,28 +2,24 @@
   "delegate":"example_file_to_execute.js",
   "parameters": [
     {
-      "name": "some_fixed_parameter",
-      "value": "some_fixed_value"
+      "param1": "some fixed parameter",
+      "param2": "another fixed parameter"
     }
   ],
   "documentation": {
     "description": "some description -- pulled in from README"
-    "expected_parameters": [
-      {
-        "name": "parameter name",
-        "type": "String"|"Number"|"URL"|"Path"
-      }
-    ],
-    "emitted_events": [
+    "expectedParameters": ["expected_param1"],
+    "successEvents": [
       {
         "path": "message path",
-        "parameters": [
-          {
-            "name": "parameter name",
-            "type": "String"|"Number"|"URL"|"Path"           
-          }
-        ]
+        "parameters": ["emitted_param1"]
       }
-    ]   
+    ],
+    "errorEvents": [
+      {
+        "path": "message path",
+        "parameters": ["emitted_param1"]
+      }
+    ]
   }
 }
