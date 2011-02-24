@@ -1,4 +1,3 @@
-
 var http = require('http');
 var url = require('url');
 var sys = require('sys');
@@ -13,37 +12,31 @@ workerLib.initialize('timer', function() {
   eventStream.on('event', function(event) {
     execute(event);
   });
-  
   eventStream.on('end', function() {
     process.exit(0);
   });
 });
-
 var execute = function(event) {
   var timerID = event.parameters.timerid;
-  var event = event.path;
-  if (event == 'timer/stop') {
+  if (event.parameters.stop) {
     stopTimer(timerID);
   } else {
     var interval = event.parameters.interval;
-    var emittingEvents = event.parameters.emittingevents;
-    startTimer(timerID, interval, emittingEvents);  
+    var emittingEvent = event.parameters.event;
+    startTimer(timerID, interval, emittingEvent);
   }
 }
-
-var startTimer = function(timerID, interval, emittingEvents) {
+var startTimer = function(timerID, interval, emittingEvent) {
   stopTimer(timerID);
-  var intervalID = setInterval(function() {
-    for (var i in emittingEvents) {
-      workerLib.emitLivelyEvent(emittingEvents[i], {});    
-    }
+  var intervalID = setInterval( function() {
+    workerLib.emitLivelyEvent(emittingEvent, {});
   }, interval*1000);
   runningTimers[timerID] = intervalID;
-  workerLib.emitLivelyEvent('timer_started', {timerID: timerID});
+  workerLib.emitLivelyEvent('started', {timerid: timerID});
 }
-
 var stopTimer = function(timerID) {
   if(runningTimers[timerID]) {
     clearInterval(runningTimers[timerID]);
+    workerLib.emitLivelyEvent('stopped', {timerid: timerID});
   }
 }

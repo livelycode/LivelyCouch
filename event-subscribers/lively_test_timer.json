@@ -1,0 +1,21 @@
+{
+  "type": "HTTP",
+  "trigger": [
+    {
+      "path": "/timer",
+      "parameters": {
+        "timerid": ":timerid"
+      }
+    }
+  ],
+  "workers": [
+    {
+      "name": "timer",
+      "parameters": {
+        "timerid": ":timerid",
+        "interval": 2,
+        "event": "test_timer"
+      }
+    }
+  ]
+}

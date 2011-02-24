@@ -1,4 +1,41 @@
 {
-  "delegate":"timer.js",
-  "arguments": {}
+  "delegate": "timer.js",
+  "parameters": {},
+  "documentation": {
+    "expectsParameters": [
+      {
+        "name": "timerid",
+        "description": "id of the timer"
+      }, {
+        "name": "interval",
+        "description": "timer interval in secondes"
+      }, {
+        "name": "event",
+        "description": "event to emit"
+      }, {
+        "name": "stop",
+        "description": "(optional) if set to true, timer of timerid will stop"
+      }
+    ],
+    "successEvents": [
+      {
+        "path": "started",
+        "parameters": [
+          {
+            "name": "timerid"
+          }
+        ]
+      }, {
+        "path": "stopped",
+        "parameters": [
+          {
+            "name": "timerid"
+          }
+        ]
+      }, {
+        "path": ":event",
+        "description": "emits the event defined by the subscriber"
+      }
+    ]
+  }
 }
