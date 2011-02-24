@@ -1,4 +1,32 @@
 {
-  "delegate":"load_document.js",
-  "arguments": {}
+  "delegate": "load_document.js",
+  "parameters": {},
+  "documentation": {
+    "expectsParameters": [
+      {
+        "name": "filepath",
+        "description": "path to the file to load"
+      }, {
+        "name": "docid",
+        "description": "id of the document to load the file into"
+      }, {
+        "name": "db",
+        "description": "name of the database"
+      }
+    ],
+    "successEvents": [
+      {
+        "path": "document_loaded",
+        "parameters": [
+          {
+            "name": "filepath"
+          }, {
+            "name": "docid"
+          }, {
+            "name": "db"
+          }
+        ]
+      }
+    ]
+  }
 }

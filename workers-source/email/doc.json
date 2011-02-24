@@ -1,8 +1,50 @@
 {
-  "delegate":"email.js",
+  "delegate": "email.js",
   "parameters": {
     "username": "your_username",
     "password": "your_password",
     "smtphost": "your_smtp_host"
+  },
+  "documentation": {
+    "expectsParameters": [
+      {
+        "name": "from",
+        "description": "the sender mail address"
+      }, {
+        "name": "to",
+        "description": "the recipient's mail address"
+      }, {
+        "name": "subject",
+        "description": "mail subject"
+      }, {
+        "name": "body",
+        "description": "body of the mail"
+      }
+    ],
+    "successEvents": [
+      {
+        "path": "sent",
+        "parameters": [
+          {
+            "name": "paths",
+            "description": "source paths of workers"
+          }
+        ]
+      }, {
+        "path": "event_source_paths",
+        "parameters": [
+          {
+            "name": "from",
+            "description": "the sender mail address"
+          }, {
+            "name": "to",
+            "description": "the recipient's mail address"
+          }, {
+            "name": "subject",
+            "description": "mail subject"
+          }
+        ]
+      }
+    ]
   }
 }

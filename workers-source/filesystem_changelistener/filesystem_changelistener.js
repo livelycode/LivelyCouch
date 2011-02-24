@@ -25,7 +25,7 @@ workerLib.initialize(name, function() {
 var execute = function(event) {
   var eventPath = event.path;
   var listenerId = event.parameters.listenerid;
-  if (eventPath == 'filesystem_changelistener/stop') {
+  if (event.parameters.stop) {
     stopChangeListener(id);
   } else {
     if(event.parameters.path) var paths = [event.parameters.path];

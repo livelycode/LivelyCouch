@@ -1,4 +1,88 @@
 {
-  "delegate":"filesystem_changelistener.js",
-  "arguments": {}
+  "delegate": "filesystem_changelistener.js",
+  "parameters": {},
+  "documentation": {
+    "expectsParameters": [
+      {
+        "name": "listenerid",
+        "description": "the id of the changelistener"
+      }, {
+        "name": "path",
+        "description": "the directory path to listen to"
+      }, {
+        "name": "paths",
+        "description": "a list of directory paths to listen to (use instead of 'path')"
+      }, {
+        "name": "fileendings",
+        "description": "(optional) the file endings the changelistener should listen to"
+      }, {
+        "name": "mark_changed_on_start",
+        "description": "(optional) if true all watched files are emitted on start"
+      }
+    ],
+    "successEvents": [
+      {
+        "path": "started",
+        "parameters": [
+          {
+            "name": "listenerid",
+            "description": "listenerid of started changelistener"
+          }
+        ]
+      }, {
+        "path": "stopped",
+        "parameters": [
+          {
+            "name": "listenerid",
+            "description": "listenerid of stopped changelistener"
+          }
+        ]
+      }, {
+        "path": "file_created",
+        "parameters": [
+          {
+            "name": "listenerid"
+          }, {
+            "name": "filepath"
+          }, {
+            "name": "fileending"
+          }, {
+            "name": "filename"
+          }, {
+            "name": "foldername"
+          }
+        ]
+      }, {
+        "path": "file_removed",
+        "parameters": [
+          {
+            "name": "listenerid"
+          }, {
+            "name": "filepath"
+          }, {
+            "name": "fileending"
+          }, {
+            "name": "filename"
+          }, {
+            "name": "foldername"
+          }
+        ]
+      }, {
+        "path": "file_modified",
+        "parameters": [
+          {
+            "name": "listenerid"
+          }, {
+            "name": "filepath"
+          }, {
+            "name": "fileending"
+          }, {
+            "name": "filename"
+          }, {
+            "name": "foldername"
+          }
+        ]
+      }
+    ]
+  }
 }

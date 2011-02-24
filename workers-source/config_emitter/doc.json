@@ -1,4 +1,26 @@
 {
-  "delegate":"config_emitter.js",
-  "arguments": {}
+  "delegate": "config_emitter.js",
+  "parameters": {},
+  "documentation": {
+    "expectsParameters": [],
+    "successEvents": [
+      {
+        "path": "worker_source_paths",
+        "parameters": [
+          {
+            "name": "paths",
+            "description": "source paths of workers"
+          }
+        ]
+      }, {
+        "path": "event_source_paths",
+        "parameters": [
+          {
+            "name": "paths",
+            "description": "source paths of event subscriptions"
+          }
+        ]
+      }
+    ]
+  }
 }

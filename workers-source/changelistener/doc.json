@@ -1,4 +1,54 @@
 {
-  "delegate":"changelistener.js",
-  "arguments": {}
+  "delegate": "changelistener.js",
+  "parameters": {},
+  "documentation": {
+    "expectsParameters": [
+      {
+        "name": "listenerid",
+        "description": "a unique identifier for listeners"
+      }, {
+        "name": "db",
+        "description": "name of the database"
+      }, {
+        "name": "filter",
+        "description": "the changes filter to listen to"
+      }, {
+        "name": "stop",
+        "description": "(optional) the listenerid to stop"
+      }
+    ],
+    "successEvents": [
+      {
+        "path": "started",
+        "parameters": [
+          {
+            "name": "listenerid",
+            "description": "listenerid that has been started"
+          }
+        ]
+      }, {
+        "path": "document_changed",
+        "parameters": [
+          {
+            "name": "listenerid",
+            "description": "the changelistener that triggered this event"
+          }, {
+            "name": "docid",
+            "description": "the document id that has changed"
+          }, {
+            "name": "db",
+            "description": "the database of the changed document"
+          }
+        ]
+      }, {
+        "path": "stopped",
+        "parameters": [
+          {
+            "name": "listenerid",
+            "description": "the changelistener that has been stopped"
+          }
+        ]
+      }
+    ]
+  }
 }

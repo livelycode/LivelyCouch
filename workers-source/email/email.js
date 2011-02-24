@@ -15,7 +15,6 @@ workerLib.initialize('email', function() {
   userName = workerParameters.username;
   password = workerParameters.password;
   host = workerParameters.smtphost;
-
   var eventStream = workerLib.openEventStream();
   eventStream.on('event', function(event) {
     execute(event);
@@ -29,7 +28,6 @@ var execute = function(event) {
   var to = event.parameters.to;
   var subject = event.parameters.subject;
   var body = event.parameters.body;
-  console.log(body);
   var userNameBuffer = new Buffer(userName.length);
   userNameBuffer.write(userName, offset=0, encoding="utf8");
   var userNameBase64 = userNameBuffer.toString("base64", 0, userNameBuffer.length);

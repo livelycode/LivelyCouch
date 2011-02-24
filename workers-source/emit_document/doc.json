@@ -1,4 +1,29 @@
 {
-  "delegate":"emit_document.js",
-  "arguments": {}
+  "delegate": "emit_document.js",
+  "arguments": {},
+  "documentation": {
+    "expectsParameters": [
+      {
+        "name": "docid",
+        "description": "document id to emit"
+      }, {
+        "name": "db",
+        "description": "database of the document to emit"
+      }, {
+        "name": "event",
+        "description": "event path to emit"
+      }
+    ],
+    "successEvents": [
+      {
+        "path": ":event",
+        "parameters": [
+          {
+            "name": "*",
+            "description": "each property in the document becomes a parameter"
+          }
+        ]
+      }
+    ]
+  }
 }
