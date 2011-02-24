@@ -1,0 +1,27 @@
+{
+  "delegate": "couchapp.js",
+  "parameters": {},
+  "documentation": {
+    "expectsParameters": [
+      {
+        "name": "folderpath",
+        "description": "path to the couchapp directory"
+      }, {
+        "name": "db",
+        "description": "database to push the couchapp into"
+      }
+    ],
+    "successEvents": [
+      {
+        "path": "pushed",
+        "parameters": [
+          {
+            "name": "folderpath"
+          }, {
+            "name": "db"
+          }
+        ]
+      }
+    ]
+  }
+}
