@@ -1,0 +1,30 @@
+{
+  "delegate": "writeout_attachments.js",
+  "parameters": {},
+  "documentation": {
+    "expectsParameters": [
+      {
+        "name": "folderpath",
+        "description": "path of the folder to write the attachments into"
+      }, {
+        "name": "docid",
+        "description": "document id to read the attachments from"
+      }, {
+        "name": "db",
+        "description": "database of the document"
+      }
+    ],
+    "successEvents": [
+      {
+        "path": "attachments_written",
+        "parameters": [
+          {
+            "name": "docid"
+          }, {
+            "name": "folderpath"
+          }
+        ]
+      }
+    ]
+  }
+}
