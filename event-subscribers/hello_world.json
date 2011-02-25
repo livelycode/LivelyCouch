@@ -1,0 +1,13 @@
+{
+  "type": "HTTP",
+  "trigger": [
+    {
+      "path": "/hello_world"
+    }
+  ],
+  "workers": [
+    {
+      "name": "hello_world"
+    }
+  ]
+}

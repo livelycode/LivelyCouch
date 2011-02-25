@@ -1,0 +1,13 @@
+{
+  "delegate": "hello_world.js",
+  "parameters": {},
+  "documentation": {
+    "expectsParameters": [],
+    "successEvents": [
+      {
+        "path": "hello",
+        "parameters": []
+      }
+    ]
+  }
+}
