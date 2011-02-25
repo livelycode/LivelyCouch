@@ -1,4 +1,6 @@
 var couchdb = require('./lib-external/couchdb');
+exports.livelyPort = 8125;
+
 exports.couchdbPort = 5984;
 exports.couchdbHost = '127.0.0.1';
 exports.couchdbUser = 'lively';
