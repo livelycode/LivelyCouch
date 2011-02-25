@@ -4,7 +4,7 @@ var url = require('url');
 var sys = require('sys');
 var fs = require('fs');
 var workerLib = require('../../lib/workerlib');
-var couchdb = workerLib.couchdb;
+var client = workerLib.client;
 
 var name = 'writefiles';
 workerLib.initialize(name, function() {
@@ -25,7 +25,6 @@ var execute = function(event) {
   var dbName = event.parameters.db;
   var login = event.parameters.login;
   var password = event.parameters.password;
-  var client = couchdb.createClient(5984, '127.0.0.1', login, password);
   writeOutAttachments(client,dbName, docId, folderPath, function() {
     workerLib.emitLivelyEvent('attachments_written', {docid:docId, dbname:dbName, folderpath:folderPath})
   });
