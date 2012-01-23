@@ -1,6 +1,11 @@
 LivelyCouch
 =====
 
+*** Note: Development on this project has halted ***  
+Check out hook.io for a project with similar goals and design:  
+https://github.com/hookio/hook.io
+
+
 LivelyCouch is a framework that integrates Node.js with CouchDB and is driven by HTTP events. It is designed to fill the gap between CouchApps and a full-fledged web application.
 All your LivelyCouch applications can be stored in CouchDB and replicated just like CouchApps.
 
